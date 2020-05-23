@@ -8,18 +8,26 @@
 
 */
 
-
 #include "Braccio.h"
 
-
-_BraccioRobot Braccio;
-
+_BraccioRobot BraccioRobot;
 
 //----------------------------------------
 
 //Initialize Braccio object
 _BraccioRobot::_BraccioRobot()
 {
+}
+
+void _BraccioRobot::setupBraccioRobot()
+{
+	// initialization pin Servo motors
+	base.attach(11);
+	shoulder.attach(10);
+	elbow.attach(9);
+	wrist_rot.attach(6);
+	wrist_ver.attach(5);
+	gripper.attach(3);
 }
 
 /**
@@ -30,7 +38,8 @@ _BraccioRobot::_BraccioRobot()
  * You should set begin(SOFT_START_DISABLED) if you are using the Arm Robot shield V1.6
  * SOFT_START_DISABLED disable the Braccio movements
  */
-unsigned int _BraccioRobot::begin(int soft_start_level)
+
+void _BraccioRobot::begin(int soft_start_level)
 {
 	//Calling Braccio.begin(SOFT_START_DISABLED) the Softstart is disabled and you can use the pin 12
 	if (soft_start_level != SOFT_START_DISABLED)
@@ -38,14 +47,6 @@ unsigned int _BraccioRobot::begin(int soft_start_level)
 		pinMode(SOFT_START_CONTROL_PIN, OUTPUT);
 		digitalWrite(SOFT_START_CONTROL_PIN, LOW);
 	}
-
-	// initialization pin Servo motors
-	base.attach(11);
-	shoulder.attach(10);
-	elbow.attach(9);
-	wrist_rot.attach(6);
-	wrist_ver.attach(5);
-	gripper.attach(3);
 
 	//For each step motor this set up the initial degree
 	base.write(0);
@@ -64,7 +65,6 @@ unsigned int _BraccioRobot::begin(int soft_start_level)
 
 	if (soft_start_level != SOFT_START_DISABLED)
 		softStart(soft_start_level);
-	return 1;
 }
 
 /*
@@ -98,6 +98,19 @@ void _BraccioRobot::softStart(int soft_start_level)
 	digitalWrite(SOFT_START_CONTROL_PIN, HIGH);
 }
 
+int _BraccioRobot::getlimit(int value, int minv, int maxv)
+{
+	if (value < minv)
+	{
+		return minv;
+	}
+	else if (value > maxv)
+	{
+		return maxv;
+	}
+	return value;
+}
+
 /**
  * This functions allow you to control all the servo motors
  * 
@@ -113,34 +126,13 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 {
 
 	// Check values, to avoid dangerous positions for the Braccio
-	if (stepDelay > 30)
-		stepDelay = 30;
-	if (stepDelay < 10)
-		stepDelay = 10;
-	if (vBase < 0)
-		vBase = 0;
-	if (vBase > 180)
-		vBase = 180;
-	if (vShoulder < 15)
-		vShoulder = 15;
-	if (vShoulder > 165)
-		vShoulder = 165;
-	if (vElbow < 0)
-		vElbow = 0;
-	if (vElbow > 180)
-		vElbow = 180;
-	if (vWrist_ver < 0)
-		vWrist_ver = 0;
-	if (vWrist_ver > 180)
-		vWrist_ver = 180;
-	if (vWrist_rot > 180)
-		vWrist_rot = 180;
-	if (vWrist_rot < 0)
-		vWrist_rot = 0;
-	if (vgripper < 10)
-		vgripper = 10;
-	if (vgripper > 73)
-		vgripper = 73;
+	stepDelay = getlimit(stepDelay, 10, 30);
+	vBase = getlimit(vBase, 0, 180);
+	vShoulder = getlimit(vShoulder, 15, 165);
+	vElbow = getlimit(vElbow, 0, 180);
+	vWrist_ver = getlimit(vWrist_ver, 0, 180);
+	vWrist_rot = getlimit(vWrist_rot, 0, 180);
+	vgripper = getlimit(vgripper, 10, 73);
 
 	int exit = 1;
 
@@ -256,4 +248,8 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 			exit = 1;
 		}
 	}
+}
+
+void _BraccioRobot::loopBraccioRobot()
+{
 }

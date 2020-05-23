@@ -53,6 +53,8 @@ void _BraccioI2C::setupI2C(int devicenum)
     Wire.begin(devicenum);                            // join i2c bus (devicenum ID for master)
     Wire.onReceive((void (*)(int)) & receiveCommand); // Magic added here = register event
 
+    BraccioRobot.setupBraccioRobot();
+
     //     Wire.onReceive( &receiveCommand  ); // Magic added here = register event
 }
 
@@ -86,7 +88,7 @@ void _BraccioI2C::loopI2C()
         robotStatus = *r;
         robotStatus.isNewCmd = true;
 
-        Braccio.ServoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
+        BraccioRobot.ServoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
 
         robotStatus.isNewCmd = false;
     }
@@ -95,7 +97,7 @@ void _BraccioI2C::loopI2C()
         robotStatus = *r;
         robotStatus.soft_start_level = r->getSoft_Start_Level();
 
-        Braccio.begin(robotStatus.soft_start_level);
+        BraccioRobot.begin(robotStatus.soft_start_level);
         Serial.println(robotStatus.soft_start_level);
 
         robotStatus.isinit = true;
