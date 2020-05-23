@@ -39,6 +39,7 @@ typedef struct RobotArmStatus : robotArmCmd
         return *this;
     }
 
+
 } RobotArmStatus;
 
 /*

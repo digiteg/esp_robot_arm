@@ -7,19 +7,14 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <Servo.h>
-#include <Braccio.h>
+
+#include "Braccio.h"
 
 #include "BraccioI2C.h"
 #include "RobotArmCmd.h"
 #include "CircularBuffer.h"
 
-Servo base;
-Servo shoulder;
-Servo elbow;
-Servo wrist_rot;
-Servo wrist_ver;
-Servo gripper;
+
 
 volatile int callCounter = 0; // holding count of executed I2C calls
 

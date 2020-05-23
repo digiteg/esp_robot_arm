@@ -1,3 +1,14 @@
+# -------------------------------------------------------------------------------
+# Name:        BraccioRobotArm
+# Purpose:     Manipulate with Braccio robot arm
+#
+# Author:      Milan Varga
+#
+# Created:     17.05.2020
+# Copyright:   (c) Milan Varga 2020
+# Licence:     <your licence>
+# -------------------------------------------------------------------------------
+
 from time import sleep_ms, ticks_ms
 from machine import I2C, Pin
 from braccio import BraccioArm
