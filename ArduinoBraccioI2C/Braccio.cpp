@@ -26,7 +26,7 @@ _BraccioRobot Braccio;
 //----------------------------------------
 
 //Initialize Braccio object
-_BraccioRobot::_Braccio()
+_BraccioRobot::_BraccioRobot()
 {
 }
 
