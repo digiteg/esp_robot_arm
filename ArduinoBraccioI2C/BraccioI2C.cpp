@@ -27,23 +27,12 @@ void _BraccioI2C::receiveCommand(int count)
 {
     byte ReadBuff[10];
 
-    Serial.print(callCounter);
-    Serial.print(", ");
-    Serial.println(count);
-
     if (count > 0)
     {
         Wire.readBytes(ReadBuff, count < 8 ? count : 8);
 
         if (ReadBuff[0] == 0x4D || ReadBuff[0] == 0x42)
             CircularBuffer.writeCircBuff(ReadBuff); // Move cmd & Begin cmd
-        /*
-         for(int x=0;x<8;x++) {
-               Serial.print(ReadBuff[x],HEX);
-                Serial.print(",");         // print the character
-            } 
-            Serial.println();
-    */
     }
 
     callCounter++;
@@ -76,8 +65,6 @@ void _BraccioI2C::loopI2C()
 {
     // put your main code here, to run repeatedly:
 
-    //Serial.print( robotStatus.cmd);
-
     if (!CircularBuffer.IsNotEmptycircBuff())
         return;
 
@@ -105,7 +92,6 @@ void _BraccioI2C::loopI2C()
     }
     else if (r->cmd == 0x42 && !isArmInit) // New cmd.. B
     {
-        // Serial.println("");
         robotStatus = *r;
         robotStatus.soft_start_level = r->getSoft_Start_Level();
 
