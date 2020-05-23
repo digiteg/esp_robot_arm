@@ -5,7 +5,6 @@
 
 */
 
-
 #ifndef BRACCIO_I2C_H_
 #define BRACCIO_I2C_H_
 
@@ -18,12 +17,13 @@
     @isNewCmd - if values changed
 */
 
-typedef struct RobotArmStatus:robotArmCmd{
+typedef struct RobotArmStatus : robotArmCmd
+{
     short soft_start_level;
     bool isinit;
     bool isNewCmd;
 
-    RobotArmStatus &operator=(const robotArmCmd& item)
+    RobotArmStatus &operator=(const robotArmCmd &item)
     {
         cmd = item.cmd;
         delay = item.delay;
@@ -34,35 +34,31 @@ typedef struct RobotArmStatus:robotArmCmd{
         wrist_ver = item.wrist_ver;
         gripper = item.gripper;
 
-        isNewCmd=true;
+        isNewCmd = true;
 
         return *this;
     }
 
-}RobotArmStatus;
-
+} RobotArmStatus;
 
 /*
     _BraccioI2C class provides interface for communication over I2C with Braccio robot arm 
 
 */
-class _BraccioI2C {
-
+class _BraccioI2C
+{
 private:
-   RobotArmStatus robotStatus;      // to keep actual robot status
-   void receiveCommand(int count);
+    RobotArmStatus robotStatus; // to keep actual robot status
+    void receiveCommand(int count);
 
 protected:
-    bool isArmInit = false;         // internal - true after intition
+    bool isArmInit = false; // internal - true after intition
 
 public:
-  
-    _BraccioI2C();                  // constructor
-    void setupI2C(int devicenum);	// inition of I2C communication
-    void loopI2C();                 // update status
+    _BraccioI2C();                      // constructor
+    void setupI2C(int devicenum);       // inition of I2C communication
+    void loopI2C();                     // update status
     RobotArmStatus getRobotArmStatus(); // return actual arm status
 };
-
-
 
 #endif // BRACCIO_I2C_H_
