@@ -6,22 +6,7 @@
 #define DEBUG 1
 #endif
 
-using namespace std;
 
-template <typename T>
-class testclass
-{
-public:
-    T namelist[10];
-
-    void setname(T name)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            namelist[i] = name;
-        }
-    }
-};
 
 #ifdef DEBUG
 void printStatus(RobotArmStatus rstat)
@@ -48,9 +33,7 @@ void setup()
 {
     // put your setup code here, to run once:
 
-    testclass<int> test;
-
-    test.setname(10);
+   
 
     BraccioI2C.setupI2C(100);
     delay(100); // sleep for while
