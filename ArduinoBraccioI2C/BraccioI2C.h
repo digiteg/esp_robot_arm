@@ -30,8 +30,8 @@ typedef struct RobotArmStatus : robotArmCmd
         base = item.base;
         shoulder = item.shoulder;
         elbow = item.elbow;
-        wrist_rot = item.wrist_rot;
         wrist_ver = item.wrist_ver;
+        wrist_rot = item.wrist_rot;
         gripper = item.gripper;
 
         isNewCmd = true;

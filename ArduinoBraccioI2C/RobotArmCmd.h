@@ -19,13 +19,14 @@
 typedef struct robotArmCmd
 {
 
+
     byte cmd;
     byte delay;
     byte base;
     byte shoulder;
     byte elbow;
-    byte wrist_rot;
     byte wrist_ver;
+    byte wrist_rot;
     byte gripper;
 
     void readbuff(byte *item) // read robotArmCmd from byte stream
@@ -35,8 +36,8 @@ typedef struct robotArmCmd
         base = item[2];
         shoulder = item[3];
         elbow = item[4];
-        wrist_rot = item[5];
-        wrist_ver = item[6];
+        wrist_ver = item[5];
+        wrist_rot = item[6];
         gripper = item[7];
     }
 
@@ -48,8 +49,8 @@ typedef struct robotArmCmd
         base = item.base;
         shoulder = item.shoulder;
         elbow = item.elbow;
-        wrist_rot = item.wrist_rot;
         wrist_ver = item.wrist_ver;
+        wrist_rot = item.wrist_rot;
         gripper = item.gripper;
 
         return *this;

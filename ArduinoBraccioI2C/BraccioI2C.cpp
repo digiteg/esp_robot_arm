@@ -14,15 +14,11 @@
 #include "RobotArmCmd.h"
 #include "CircularBuffer.h"
 
-
-
 volatile int callCounter = 0; // holding count of executed I2C calls
 
 _CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
 
-
 //----------------------------------------
-
 
 //Initialize Braccio I2C object
 _BraccioI2C::_BraccioI2C()
@@ -33,9 +29,8 @@ _BraccioI2C::_BraccioI2C()
     robotStatus.isinit = false;
     robotStatus.isNewCmd = false;
 
-    previousTime= millis();  // init internal Timer
+    previousTime = millis(); // init internal Timer
 }
-
 
 // Event handler - read from I2C
 void _BraccioI2C::receiveCommand(int count)
@@ -56,17 +51,16 @@ void _BraccioI2C::receiveCommand(int count)
 // Setup of I2C
 void _BraccioI2C::setupI2C(int devicenum)
 {
- 
+
     Wire.begin(devicenum);                            // join i2c bus (devicenum ID for master)
     Wire.onReceive((void (*)(int)) & receiveCommand); // Magic added here = register event
 
     BraccioRobot.setupBraccioRobot();
-
 }
 
 RobotArmStatus _BraccioI2C::getRobotArmStatus()
 {
-    return robotStatus;     // return current robot status
+    return robotStatus; // return current robot status
 }
 
 void _BraccioI2C::loopI2C()

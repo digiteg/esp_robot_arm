@@ -110,8 +110,8 @@ class BraccioArm:
     def toCVS(self):
         txt = str(self.delay) + ',' + str(self.base) + ',' + \
             str(self.shoulder) + ',' + str(self.elbow) + ','
-        txt += str(self.wrist_ver) + ',' + \
-            str(self.wrist_rot) + ',' + str(self.gripper)
+        txt += str(self.wrist_rot) + ',' + \
+            str(self.wrist_ver) + ',' + str(self.gripper)
         return txt
 
     def toBytes(self, cmd_prefix=0):
@@ -121,8 +121,8 @@ class BraccioArm:
         cmd[2] = self.base & 0xFF
         cmd[3] = self.shoulder & 0xFF
         cmd[4] = self.elbow & 0xFF
-        cmd[5] = self.wrist_ver & 0xFF
-        cmd[6] = self.wrist_rot & 0xFF
+        cmd[5] = self.wrist_rot & 0xFF
+        cmd[6] = self.wrist_ver & 0xFF
         cmd[7] = self.gripper & 0xFF
 
         if (cmd_prefix == 0x00):
@@ -183,7 +183,7 @@ class BraccioArm:
      @param vgripper next gripper servo motor degree
  """
 
-    def movement(self, stepDelay=10, vBase=0, vShoulder=15, vElbow=0, vWrist_ver=0, vWrist_rot=0, vgripper=10):
+    def movement(self, stepDelay=10, vBase=0, vShoulder=15, vElbow=0,  vWrist_rot=0, vWrist_ver=0, vgripper=10):
 
         # Check values, to avoid dangerous positions for the Braccio
         # ServoMovement(step delay, M1, M2, M3, M4, M5, M6);
@@ -192,8 +192,8 @@ class BraccioArm:
         self.base = vBase
         self.shoulder = vShoulder
         self.elbow = vElbow
-        self.wrist_ver = vWrist_ver
         self.wrist_rot = vWrist_rot
+        self.wrist_ver = vWrist_ver
         self.gripper = vgripper
 
     # Initialize Test :

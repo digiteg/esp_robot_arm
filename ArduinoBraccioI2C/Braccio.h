@@ -48,7 +48,7 @@ public:
     /**
     * This function allow the user to control all the servo motors in the Braccio
     */
-    int ServoMovement(int stepdelay, int vbase, int vshoulder, int velbow, int vwrist_ver, int vwrist_rot, int vgripper);
+    int ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
 
     void loopBraccioRobot();
 

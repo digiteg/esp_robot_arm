@@ -56,6 +56,7 @@ void _BraccioRobot::begin(int soft_start_level)
 	wrist_ver.write(170);
 	wrist_rot.write(0);
 	gripper.write(73);
+	
 	//Previous step motor position
 	step_base = 0;
 	step_shoulder = 40;
@@ -63,6 +64,8 @@ void _BraccioRobot::begin(int soft_start_level)
 	step_wrist_ver = 170;
 	step_wrist_rot = 0;
 	step_gripper = 73;
+
+
 
 	if (soft_start_level != SOFT_START_DISABLED)
 		softStart(soft_start_level);
@@ -102,13 +105,11 @@ void _BraccioRobot::softStart(int soft_start_level)
 int _BraccioRobot::getlimit(int value, int minv, int maxv)
 {
 	if (value < minv)
-	{
 		return minv;
-	}
-	else if (value > maxv)
-	{
+
+	if (value > maxv)
 		return maxv;
-	}
+
 	return value;
 }
 
@@ -143,7 +144,7 @@ int _BraccioRobot::moveServo(Servo *s, int target, int step)
  * @param vWrist_rot next wrist vertical servo motor degree
  * @param vgripper next gripper servo motor degree
  */
-int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_ver, int vWrist_rot, int vgripper)
+int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
 {
 
 	// Check values, to avoid dangerous positions for the Braccio
@@ -164,21 +165,21 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 		step_base = moveServo(&base, vBase, step_base);
 		step_shoulder = moveServo(&shoulder, vShoulder, step_shoulder);
 		step_elbow = moveServo(&elbow, vElbow, step_elbow);
-		step_wrist_rot = moveServo(&wrist_rot, vWrist_ver, step_wrist_rot);
-		step_wrist_ver = moveServo(&wrist_ver, vWrist_rot, step_wrist_ver);
+		step_wrist_ver = moveServo(&wrist_ver, vWrist_ver, step_wrist_ver);
+		step_wrist_rot = moveServo(&wrist_rot, vWrist_rot, step_wrist_rot);
 		step_gripper = moveServo(&gripper, vgripper, step_gripper);
 
 		//delay between each movement
 		delay(stepDelay);
 
 		//It checks if all the servo motors are in the desired position
-		if ((vBase == step_base) && (vShoulder == step_shoulder) && (vElbow == step_elbow) && (vWrist_ver == step_wrist_rot) && (vWrist_rot == step_wrist_ver) && (vgripper == step_gripper))
+		if ((vBase == step_base) && (vShoulder == step_shoulder) && (vElbow == step_elbow) && (vWrist_ver == step_wrist_ver) && (vWrist_rot == step_wrist_rot) && (vgripper == step_gripper))
 		{
 			step_base = vBase;
 			step_shoulder = vShoulder;
 			step_elbow = vElbow;
-			step_wrist_rot = vWrist_ver;
-			step_wrist_ver = vWrist_rot;
+			step_wrist_rot = vWrist_rot;
+			step_wrist_ver = vWrist_ver;
 			step_gripper = vgripper;
 			exit = 0;
 		}

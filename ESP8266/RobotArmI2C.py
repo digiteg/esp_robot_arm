@@ -79,9 +79,10 @@ class BraccioArmI2C(BraccioArm):
         super().begin(soft_start_level)
         self._sendBegin()
 
-    def movement(self, stepDelay=10, vBase=0, vShoulder=15, vElbow=0, vWrist_ver=0, vWrist_rot=0, vgripper=10):
+
+    def movement(self, stepDelay=10, vBase=0, vShoulder=15, vElbow=0, vWrist_rot=0, vWrist_ver=0,  vgripper=10):
         super().movement(stepDelay, vBase, vShoulder,
-                         vElbow, vWrist_ver, vWrist_rot, vgripper)
+                         vElbow, vWrist_rot, vWrist_ver, vgripper)
         self._sendMove()  # M: - movement command
 
     def defaultpos(self):
@@ -128,16 +129,18 @@ print(arm.gripper)
 # print(arr)
 
 arm.begin()
-arm.movement(20, 90,  0, 180, 160,  0,  15)
+arm.movement(20, 90,  0, 180,   0,160,  15)
 
 
 #arm.movement(180, 180, 180, 180, 180, 180, 180)
 
 for i in range(5):
-    arm.movement(20, 0, 15, 180, 170, 0, 73)
-    sleep(1)
-    arm.movement(20, 180, 165, 0, 0, 180, 10)
-    sleep(1)
+    arm.movement(20, 0, 15, 180, 0,170, 73)
+    sleep_ms(1000)
+    arm.movement(20, 180, 165, 0, 180,0, 10)
+    sleep_ms(1000)
+
+arm.movement(20, 0,  45, 180, 180,90,10)
 
 
 # i2c.start()
