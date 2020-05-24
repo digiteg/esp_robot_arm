@@ -39,7 +39,6 @@ typedef struct RobotArmStatus : robotArmCmd
         return *this;
     }
 
-
 } RobotArmStatus;
 
 /*
@@ -49,6 +48,9 @@ typedef struct RobotArmStatus : robotArmCmd
 class _BraccioI2C
 {
 private:
+    unsigned long previousTime;
+    long timeInterval = 1000;
+
     RobotArmStatus robotStatus; // to keep actual robot status
     void receiveCommand(int count);
 

@@ -20,9 +20,24 @@ volatile int callCounter = 0; // holding count of executed I2C calls
 
 _CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
 
+
 //----------------------------------------
 
-// read from I2C
+
+//Initialize Braccio I2C object
+_BraccioI2C::_BraccioI2C()
+{
+
+    robotStatus.cmd = 0;
+    robotStatus.soft_start_level = 0;
+    robotStatus.isinit = false;
+    robotStatus.isNewCmd = false;
+
+    previousTime= millis();  // init internal Timer
+}
+
+
+// Event handler - read from I2C
 void _BraccioI2C::receiveCommand(int count)
 {
     byte ReadBuff[10];
@@ -38,37 +53,37 @@ void _BraccioI2C::receiveCommand(int count)
     callCounter++;
 }
 
-//Initialize Braccio I2C object
-_BraccioI2C::_BraccioI2C()
-{
-
-    robotStatus.cmd = 0;
-    robotStatus.soft_start_level = 0;
-    robotStatus.isinit = false;
-    robotStatus.isNewCmd = false;
-}
-
+// Setup of I2C
 void _BraccioI2C::setupI2C(int devicenum)
 {
+ 
     Wire.begin(devicenum);                            // join i2c bus (devicenum ID for master)
     Wire.onReceive((void (*)(int)) & receiveCommand); // Magic added here = register event
 
     BraccioRobot.setupBraccioRobot();
 
-    //     Wire.onReceive( &receiveCommand  ); // Magic added here = register event
 }
 
 RobotArmStatus _BraccioI2C::getRobotArmStatus()
 {
-    return robotStatus;
+    return robotStatus;     // return current robot status
 }
 
 void _BraccioI2C::loopI2C()
 {
+
+    unsigned long currentTime = millis();
+
     // put your main code here, to run repeatedly:
 
     if (!CircularBuffer.IsNotEmptycircBuff())
         return;
+
+    // task 1
+    if (currentTime - previousTime > timeInterval)
+    {
+        previousTime = currentTime;
+    }
 
     robotArmCmd *r = CircularBuffer.readCircBuff();
 

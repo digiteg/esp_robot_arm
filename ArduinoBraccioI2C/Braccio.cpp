@@ -17,6 +17,7 @@ _BraccioRobot BraccioRobot;
 //Initialize Braccio object
 _BraccioRobot::_BraccioRobot()
 {
+	previousTimeServoMove = millis(); // init internal Timer
 }
 
 void _BraccioRobot::setupBraccioRobot()
@@ -111,6 +112,26 @@ int _BraccioRobot::getlimit(int value, int minv, int maxv)
 	return value;
 }
 
+int _BraccioRobot::moveServo(Servo *s, int target, int step)
+{
+	//For each servo motor if next degree is not the same of the previuos than do the movement
+
+	if (target == step) // on position
+		return target;
+
+	s->write(step);
+
+	if (target > step)
+	{
+		step++; //One step forward
+	}
+	else
+	{
+		step--; //One step backward
+	}
+	return step;
+}
+
 /**
  * This functions allow you to control all the servo motors
  * 
@@ -139,95 +160,13 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 	//Until the all motors are in the desired position
 	while (exit)
 	{
-		//For each servo motor if next degree is not the same of the previuos than do the movement
-		if (vBase != step_base)
-		{
-			base.write(step_base);
-			//One step ahead
-			if (vBase > step_base)
-			{
-				step_base++;
-			}
-			//One step beyond
-			if (vBase < step_base)
-			{
-				step_base--;
-			}
-		}
 
-		if (vShoulder != step_shoulder)
-		{
-			shoulder.write(step_shoulder);
-			//One step ahead
-			if (vShoulder > step_shoulder)
-			{
-				step_shoulder++;
-			}
-			//One step beyond
-			if (vShoulder < step_shoulder)
-			{
-				step_shoulder--;
-			}
-		}
-
-		if (vElbow != step_elbow)
-		{
-			elbow.write(step_elbow);
-			//One step ahead
-			if (vElbow > step_elbow)
-			{
-				step_elbow++;
-			}
-			//One step beyond
-			if (vElbow < step_elbow)
-			{
-				step_elbow--;
-			}
-		}
-
-		if (vWrist_ver != step_wrist_rot)
-		{
-			wrist_rot.write(step_wrist_rot);
-			//One step ahead
-			if (vWrist_ver > step_wrist_rot)
-			{
-				step_wrist_rot++;
-			}
-			//One step beyond
-			if (vWrist_ver < step_wrist_rot)
-			{
-				step_wrist_rot--;
-			}
-		}
-
-		if (vWrist_rot != step_wrist_ver)
-		{
-			wrist_ver.write(step_wrist_ver);
-			//One step ahead
-			if (vWrist_rot > step_wrist_ver)
-			{
-				step_wrist_ver++;
-			}
-			//One step beyond
-			if (vWrist_rot < step_wrist_ver)
-			{
-				step_wrist_ver--;
-			}
-		}
-
-		if (vgripper != step_gripper)
-		{
-			gripper.write(step_gripper);
-			if (vgripper > step_gripper)
-			{
-				step_gripper++;
-			}
-			//One step beyond
-			if (vgripper < step_gripper)
-			{
-				step_gripper--;
-			}
-		}
+		step_base = moveServo(&base, vBase, step_base);
+		step_shoulder = moveServo(&shoulder, vShoulder, step_shoulder);
+		step_elbow = moveServo(&elbow, vElbow, step_elbow);
+		step_wrist_rot = moveServo(&wrist_rot, vWrist_ver, step_wrist_rot);
+		step_wrist_ver = moveServo(&wrist_ver, vWrist_rot, step_wrist_ver);
+		step_gripper = moveServo(&gripper, vgripper, step_gripper);
 
 		//delay between each movement
 		delay(stepDelay);
@@ -252,4 +191,11 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 
 void _BraccioRobot::loopBraccioRobot()
 {
+	unsigned long currentTime = millis();
+
+	// task 1
+	if (currentTime - previousTimeServoMove > timeIntervalServoMove)
+	{
+		previousTimeServoMove = currentTime;
+	}
 }
