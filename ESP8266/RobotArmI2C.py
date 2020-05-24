@@ -127,23 +127,17 @@ print(arm.gripper)
 #arr = bytes(arm.toJSON(),"utf8")
 # print(arr)
 
-arm.begin(745)
-arm.movement(180, 180, 180, 180, 180, 180, 180)
+arm.begin()
+arm.movement(20, 90,  0, 180, 160,  0,  15)
 
-arm.movement(20, 0, 15, 180, 170, 0, 73)
-arm.movement(20, 180, 165, 0, 0, 180, 10)
 
-# arm.movement(20,0,15,180,170,0,73)
-# arm.movement(20,180,165,0,0,180,10)
+#arm.movement(180, 180, 180, 180, 180, 180, 180)
 
-# arm.movement(20,0,15,180,170,0,73)
-# arm.movement(20,180,165,0,0,180,10)
-
-# arm.movement(20,0,15,180,170,0,73)
-# arm.movement(20,180,165,0,0,180,10)
-
-# arm.movement(20,0,15,180,170,0,73)
-# arm.movement(20,180,165,0,0,180,10)
+for i in range(5):
+    arm.movement(20, 0, 15, 180, 170, 0, 73)
+    sleep(1)
+    arm.movement(20, 180, 165, 0, 0, 180, 10)
+    sleep(1)
 
 
 # i2c.start()

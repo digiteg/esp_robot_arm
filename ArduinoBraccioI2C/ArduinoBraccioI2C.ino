@@ -27,5 +27,4 @@ void loop()
     // put your main code here, to run repeatedly:
     BraccioI2C.loopI2C();
     //Serial.println(BraccioI2C.robotStatus.isNewCmd);
-    delay(100);
 }
