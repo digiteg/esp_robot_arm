@@ -24,10 +24,16 @@ private:
 
 public:
 
-    bool IsNotEmptycircBuff()   
+    bool IsNotEmpty()   
     {
         return (circBufferCount > 0);       // true if buffer is not empty
     }
+
+    bool IsEmpty()   
+    {
+        return (circBufferCount <= 0);       // true if buffer is not empty
+    }
+
 
     bool IsFull()
     {

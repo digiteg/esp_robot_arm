@@ -129,7 +129,7 @@ print(arm.gripper)
 # print(arr)
 
 arm.begin()
-arm.movement(20, 90,  0, 180,   0,160,  15)
+
 
 
 #arm.movement(180, 180, 180, 180, 180, 180, 180)
@@ -140,7 +140,7 @@ for i in range(5):
     arm.movement(20, 180, 165, 0, 180,0, 10)
     sleep_ms(1000)
 
-arm.movement(20, 0,  45, 180, 180,90,10)
+arm.movement(20, 90,  0, 180,   0,160,  15)
 
 
 # i2c.start()

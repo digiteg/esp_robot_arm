@@ -66,18 +66,13 @@ RobotArmStatus _BraccioI2C::getRobotArmStatus()
 void _BraccioI2C::loopI2C()
 {
 
-    unsigned long currentTime = millis();
 
     // put your main code here, to run repeatedly:
 
-    if (!CircularBuffer.IsNotEmptycircBuff())
-        return;
+    BraccioRobot.loopBraccioRobot();
 
-    // task 1
-    if (currentTime - previousTime > timeInterval)
-    {
-        previousTime = currentTime;
-    }
+    if (CircularBuffer.IsEmpty())
+        return;
 
     robotArmCmd *r = CircularBuffer.readCircBuff();
 
@@ -110,6 +105,8 @@ void _BraccioI2C::loopI2C()
         Serial.println(robotStatus.soft_start_level);
 
         robotStatus.isinit = true;
-        isArmInit = true;
+        robotStatus.isNewCmd = false;
+        isArmInit = true;          
     }
+
 }
