@@ -63,15 +63,51 @@ RobotArmStatus _BraccioI2C::getRobotArmStatus()
     return robotStatus; // return current robot status
 }
 
+void _BraccioI2C::Stop()
+{
+    BraccioRobot.Stop();
+
+    isExit = true;
+    isPause = false;
+}
+
+void _BraccioI2C::powerOff()
+{
+    Stop();
+    BraccioRobot.powerOff();
+}
+
+void _BraccioI2C::powerOn()
+{
+    Stop();
+    BraccioRobot.powerOn();
+}
+
+void _BraccioI2C::pauseOff()
+{
+    isPause = false;
+    BraccioRobot.pauseOff();
+}
+
+void _BraccioI2C::pauseOn()
+{
+    isPause = true;
+    BraccioRobot.pauseOn();
+}
+
+bool _BraccioI2C::IsProcessing()
+{
+    return BraccioRobot.IsProcessing();
+}
+
 void _BraccioI2C::loopI2C()
 {
-
 
     // put your main code here, to run repeatedly:
 
     BraccioRobot.loopBraccioRobot();
 
-    if (CircularBuffer.IsEmpty())
+    if (BraccioRobot.IsProcessing() || CircularBuffer.IsEmpty())
         return;
 
     robotArmCmd *r = CircularBuffer.readCircBuff();
@@ -106,7 +142,6 @@ void _BraccioI2C::loopI2C()
 
         robotStatus.isinit = true;
         robotStatus.isNewCmd = false;
-        isArmInit = true;          
+        isArmInit = true;
     }
-
 }

@@ -71,7 +71,6 @@ void _BraccioRobot::begin(int soft_start_level)
 
 	if (soft_start_level != SOFT_START_DISABLED)
 		softStart(soft_start_level);
-
 }
 
 void _BraccioRobot::Stop()
@@ -107,6 +106,11 @@ void _BraccioRobot::pauseOff()
 void _BraccioRobot::pauseOn()
 {
 	isPause = true;
+}
+
+bool _BraccioRobot::IsProcessing()
+{
+	return !isExit;
 }
 
 /*
@@ -197,9 +201,9 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 	new_step_gripper = getlimit(vgripper, 10, 73);
 
 	timeIntervalServoMove = getlimit(stepDelay, 10, 30); // setup delay to milis
-	previousTimeServoMove = millis(); // init internal Timer
-	
-	isExit = false;										 // enable loop
+	previousTimeServoMove = millis();					 // init internal Timer
+
+	isExit = false; // enable loop
 }
 
 void _BraccioRobot::loopBraccioRobot()
@@ -212,10 +216,6 @@ void _BraccioRobot::loopBraccioRobot()
 	// task 1
 	if (currentTime - previousTimeServoMove > timeIntervalServoMove)
 	{
-		
-		Serial.print("time: ");
-		Serial.println(currentTime-previousTimeServoMove);
-
 
 		previousTimeServoMove = currentTime;
 
@@ -233,5 +233,4 @@ void _BraccioRobot::loopBraccioRobot()
 	{
 		Stop();
 	}
-
 }

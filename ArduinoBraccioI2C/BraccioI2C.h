@@ -48,6 +48,9 @@ typedef struct RobotArmStatus : robotArmCmd
 class _BraccioI2C
 {
 private:
+    // multithread ...
+    bool isExit = false;
+    bool isPause = false;
     unsigned long previousTime;
     long timeInterval = 1000;
 
@@ -62,6 +65,29 @@ public:
     void setupI2C(int devicenum);       // inition of I2C communication
     void loopI2C();                     // update status
     RobotArmStatus getRobotArmStatus(); // return actual arm status
+
+    /* 
+    Turns off / On power to the servo motors. This only work if you are using a robot shield later than V1.6.
+    Note that after a call to init() the power is on 
+*/
+    void powerOff();
+    void powerOn();
+
+    /* 
+    Pause exec of command and move of servo motors. 
+*/
+    void pauseOff();
+    void pauseOn();
+
+    /* 
+    Stop exec of command and all servo motors. 
+*/
+    void Stop();
+
+    /*
+    Return ifo if command is still in process
+*/
+    bool IsProcessing();
 };
 
 #endif // BRACCIO_I2C_H_

@@ -135,13 +135,13 @@ arm.begin()
 #arm.movement(180, 180, 180, 180, 180, 180, 180)
 
 for i in range(5):
-    arm.movement(20, 0, 15, 180, 0,170, 73)
-    sleep_ms(1000)
-    arm.movement(20, 180, 165, 0, 180,0, 10)
-    sleep_ms(1000)
+    arm.movement(20, 0, 15, 175, 0,175, 73)
+    sleep_ms(10)
+    arm.movement(20, 175, 165, 0, 175,0, 10)
+    sleep_ms(10)
 
-arm.movement(20, 90,  0, 180,   0,160,  15)
-
+arm.movement(20, 90,  0, 175,   0,160,  15)
+arm.defaultpos()
 
 # i2c.start()
 # i2c.writeto(robot_arm_address,arm.toBytes())

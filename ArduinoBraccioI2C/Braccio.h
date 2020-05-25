@@ -34,12 +34,12 @@ class _BraccioRobot
 public:
     _BraccioRobot();
 
- /* 
+    /* 
   Braccio setup
  */
     void setupBraccioRobot();
 
- /*
+    /*
      Braccio initializations and set intial position
      Modifing this function you can set up the initial position of all the
      servo motors of Braccio 
@@ -48,34 +48,35 @@ public:
  */
     void begin(int soft_start_level = SOFT_START_DEFAULT);
 
- /*
+    /*
      This function allow the user to control all the servo motors in the Braccio
  */
     int ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
 
-/* 
+    /* 
     Turns off / On power to the servo motors. This only work if you are using a robot shield later than V1.6.
     Note that after a call to init() the power is on 
 */
     void powerOff();
     void powerOn();
 
-
-/* 
+    /* 
     Pause exec of command and move of servo motors. 
 */
     void pauseOff();
     void pauseOn();
 
-/* 
+    /* 
     Stop exec of command and all servo motors. 
 */
     void Stop();
 
+    /*
+    Return ifo if command is still in process
+*/
+    bool IsProcessing();
 
-
-
-/*
+    /*
     Exec commands and allow multitasking
 */
     void loopBraccioRobot();
@@ -90,8 +91,7 @@ private:
 
     int soft_start_level = SOFT_START_DEFAULT;
 
-
-// --------- current possition
+    // --------- current possition
 
     int step_base = 0;
     int step_shoulder = 45;
@@ -100,7 +100,7 @@ private:
     int step_wrist_ver = 90;
     int step_gripper = 10;
 
-// ------- new possition
+    // ------- new possition
 
     int new_step_base = 0;
     int new_step_shoulder = 45;
@@ -109,25 +109,24 @@ private:
     int new_step_wrist_ver = 90;
     int new_step_gripper = 10;
 
-// multithread ...
+    // multithread ...
     bool isExit = false;
-    bool isPause =false;
+    bool isPause = false;
     unsigned long previousTimeServoMove = 0;
     long timeIntervalServoMove = 1000;
 
-/*
+    /*
     helper for stepping servo
 */
 
     int moveServo(Servo *s, int target, int step);
 
-/*
+    /*
   returns value between min max
 */
     int getlimit(int value, int minv, int maxv);
 
-
-/*
+    /*
     This function, used only with the Braccio Shield V4 and greater,
     turn ON the Braccio softly and save Braccio from brokes.
     The SOFT_START_CONTROL_PIN is used as a software PWM
@@ -135,13 +134,12 @@ private:
 */
     void softStart(int soft_start_level);
 
-/*
+    /*
    Software implementation of the PWM for the SOFT_START_CONTROL_PIN,HIGH
    @param high_time: the time in the logic level high
    @param low_time: the time in the logic level low
 */
     void softwarePWM(int high_time, int low_time);
-
 };
 
 extern _BraccioRobot BraccioRobot;
