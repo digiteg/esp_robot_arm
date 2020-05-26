@@ -61,6 +61,12 @@ public:
         writeIndex = (writeIndex+1) % MAX_CIRC_BUFF;
         circBufferCount++;          // internal usage counter
     }
+    void reset()
+    {
+        readIndex=0;
+        writeIndex=0;
+        circBufferCount=0;  
+    }
 
 };
 

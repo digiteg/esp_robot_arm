@@ -60,12 +60,21 @@ class BraccioArmI2C(BraccioArm):
         else:
             print("Device not found")
 
-    def _sendBegin(self):
-        cmd = [0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-        cmd[1] = self.robotSoftStartLevel & 0xFF
-        cmd[2] = self.robotSoftStartLevel >> 8 & 0xFF
-        print(cmd)
+    def _getSimpleCmd(self, cmdid=0x00, param1=0x00, param2=0x00):
+        cmd = [cmdid & 0xFF, param1 & 0xFF, param2 &
+               0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
+        return cmd
+
+    def _sendSimleCmd(self, cmdid=0x00, param1=0x00, param2=0x00):
+        cmd = self._getSimpleCmd(0x42, self.robotSoftStartLevel,
+                            self.robotSoftStartLevel >> 8)
+        print(cmd) # debug
         self._sendI2Ccommand(cmd)
+
+
+    def _sendBegin(self):
+        self._sendSimleCmd ( 0x42, self.robotSoftStartLevel,
+                            self.robotSoftStartLevel >> 8)
 
     def _sendMove(self):
         self._sendI2Ccommand(self.toBytes(0x4D))  # M: - movement command
@@ -79,7 +88,6 @@ class BraccioArmI2C(BraccioArm):
         super().begin(soft_start_level)
         self._sendBegin()
 
-
     def movement(self, stepDelay=10, vBase=0, vShoulder=15, vElbow=0, vWrist_rot=0, vWrist_ver=0,  vgripper=10):
         super().movement(stepDelay, vBase, vShoulder,
                          vElbow, vWrist_rot, vWrist_ver, vgripper)
@@ -91,9 +99,25 @@ class BraccioArmI2C(BraccioArm):
 
     def turnoff(self):
         super().turnoff()  # ready to turn off
-        self._sendMove()  # M: - movement command
+        self._sendSimleCmd ( 0x4F, 0x00) #  O: False - turn Off command
+
+
+    def turnon(self):
+        super().turnoff()  # ready to turn off
+        self._sendSimleCmd ( 0x4F, 0x01) # O: True - turn On command
+
+    def stop(self):
+        super.stop()
+        self._sendSimleCmd ( 0x53) # S: - stop command 
+
+    def pauseoff(self):
+        self._sendSimleCmd ( 0x50, 0x00) # P: False - pause Off command 
+
+    def pauseon(self):
+        self._sendSimleCmd ( 0x50, 0x01) # P: True - pause On command 
 
    # ------------- Destructors:
+
     def __enter__(self):
         return self
 
@@ -131,16 +155,15 @@ print(arm.gripper)
 arm.begin()
 
 
-
 #arm.movement(180, 180, 180, 180, 180, 180, 180)
 
 for i in range(5):
-    arm.movement(20, 0, 15, 175, 0,175, 73)
+    arm.movement(20, 0, 15, 175, 0, 175, 73)
     sleep_ms(10)
-    arm.movement(20, 175, 165, 0, 175,0, 10)
+    arm.movement(20, 175, 165, 0, 175, 0, 10)
     sleep_ms(10)
 
-arm.movement(20, 90,  0, 175,   0,160,  15)
+arm.movement(20, 90,  0, 175,   0, 160,  15)
 arm.defaultpos()
 
 # i2c.start()

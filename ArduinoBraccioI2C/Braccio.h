@@ -3,8 +3,8 @@
     Braccio.h - Braccio arm I2C communication  library Version 1.0
     modified by Milan Varga
  	
-	  original Braccio.cpp - board library Version 2.0
- 	  Written by Andrea Martino and Angelo Ferrante
+	derived from original Braccio.cpp - board library Version 2.0
+ 	Written by Andrea Martino and Angelo Ferrante
 
 */
 

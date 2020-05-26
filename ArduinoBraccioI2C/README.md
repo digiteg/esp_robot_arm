@@ -36,6 +36,7 @@ The kit includes a controller as cap for Arduino, so-called Braccio Arduino Shie
 
 
 [![Sterownik robota Arduino](http://botland.com.pl/img/art/inne/06362_11b.jpg "Arduino Shield Braccio")](http://botland.com.pl/img/art/inne/06362_11.jpg)
+
 _The driver of the arm, cap over Arduino - Braccio Shield._
 
 

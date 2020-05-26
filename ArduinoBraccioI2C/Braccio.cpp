@@ -3,7 +3,7 @@
     Braccio.cpp - Braccio arm I2C communication  library Version 1.0
     modified by Milan Varga
  	
-	original Braccio.cpp - board library Version 2.0
+	derived from original Braccio.cpp - board library Version 2.0
  	Written by Andrea Martino and Angelo Ferrante
 
 */
@@ -73,41 +73,49 @@ void _BraccioRobot::begin(int soft_start_level)
 		softStart(soft_start_level);
 }
 
+// Stop all commands execution
 void _BraccioRobot::Stop()
 {
-	step_base = new_step_base;
+
+	// clear all positions
+	step_base = new_step_base; 
 	step_shoulder = new_step_shoulder;
 	step_elbow = new_step_elbow;
 	step_wrist_rot = new_step_wrist_rot;
 	step_wrist_ver = new_step_wrist_ver;
 	step_gripper = new_step_gripper;
 
-	isExit = true;
-	isPause = false;
+	isExit = true;		// stop execution
+	isPause = false; 	// reset pause
 }
 
+// Turm power off if you are using the Arm Robot shield V1.6
 void _BraccioRobot::powerOff()
 {
 	Stop();
 	digitalWrite(SOFT_START_CONTROL_PIN, LOW);
 }
 
+// Turm power on if you are using the Arm Robot shield V1.6
 void _BraccioRobot::powerOn()
 {
 	Stop();
 	digitalWrite(SOFT_START_CONTROL_PIN, HIGH);
 }
 
-void _BraccioRobot::pauseOff()
+//  Release pause and continue robot arm movement shield V1.6
+void _BraccioRobot::pauseOff() 
 {
 	isPause = false;
 }
 
+// Pause robot arm movement 
 void _BraccioRobot::pauseOn()
 {
 	isPause = true;
 }
 
+// Retrn info if there is movement of robot arm in progress 
 bool _BraccioRobot::IsProcessing()
 {
 	return !isExit;
@@ -144,6 +152,7 @@ void _BraccioRobot::softStart(int soft_start_level)
 	digitalWrite(SOFT_START_CONTROL_PIN, HIGH);
 }
 
+// Return value within boundary of min and max
 int _BraccioRobot::getlimit(int value, int minv, int maxv)
 {
 	if (value < minv)
@@ -155,6 +164,7 @@ int _BraccioRobot::getlimit(int value, int minv, int maxv)
 	return value;
 }
 
+// Move servo by 1 degree in time 
 int _BraccioRobot::moveServo(Servo *s, int target, int step)
 {
 	//For each servo motor if next degree is not the same of the previuos than do the movement
@@ -213,13 +223,13 @@ void _BraccioRobot::loopBraccioRobot()
 
 	unsigned long currentTime = millis();
 
-	// task 1
+	// scheduled task executed afther wait interval timeIntervalServoMove
 	if (currentTime - previousTimeServoMove > timeIntervalServoMove)
 	{
 
-		previousTimeServoMove = currentTime;
+		previousTimeServoMove = currentTime; // restart time counter
 
-		// Start moving all motors to new position
+		// Move all motors to new position by 1 degree
 
 		step_base = moveServo(&base, new_step_base, step_base);
 		step_shoulder = moveServo(&shoulder, new_step_shoulder, step_shoulder);
@@ -231,6 +241,6 @@ void _BraccioRobot::loopBraccioRobot()
 	//It checks if all the servo motors are in the desired position
 	if ((new_step_base == step_base) && (new_step_shoulder == step_shoulder) && (new_step_elbow == step_elbow) && (new_step_wrist_rot == step_wrist_rot) && (new_step_wrist_ver == step_wrist_ver) && (new_step_gripper == step_gripper))
 	{
-		Stop();
+		Stop(); // stop all 
 	}
 }

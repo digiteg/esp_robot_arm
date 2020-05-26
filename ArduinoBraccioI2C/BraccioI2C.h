@@ -22,6 +22,9 @@ typedef struct RobotArmStatus : robotArmCmd
     short soft_start_level;
     bool isinit;
     bool isNewCmd;
+    bool isPaused;
+    bool isPowerOn;
+    bool isStopped;
 
     RobotArmStatus &operator=(const robotArmCmd &item)
     {
@@ -35,8 +38,17 @@ typedef struct RobotArmStatus : robotArmCmd
         gripper = item.gripper;
 
         isNewCmd = true;
-
         return *this;
+    }
+
+    void reset(bool init =false, bool newcmd = false)
+    {
+        isinit = init;
+        isNewCmd = newcmd;
+     
+        isPaused = false;
+        isPowerOn = true;
+        isStopped = false;
     }
 
 } RobotArmStatus;
@@ -49,7 +61,6 @@ class _BraccioI2C
 {
 private:
     // multithread ...
-    bool isExit = false;
     bool isPause = false;
     unsigned long previousTime;
     long timeInterval = 1000;

@@ -65,34 +65,42 @@ RobotArmStatus _BraccioI2C::getRobotArmStatus()
 
 void _BraccioI2C::Stop()
 {
+    isPause = false;
+    robotStatus.reset(true);
+    robotStatus.isStopped = true;
+
     BraccioRobot.Stop();
 
-    isExit = true;
-    isPause = false;
+   
 }
 
 void _BraccioI2C::powerOff()
 {
     Stop();
     BraccioRobot.powerOff();
+    robotStatus.isinit =false;
+    robotStatus.isPowerOn = false;
 }
 
 void _BraccioI2C::powerOn()
 {
     Stop();
     BraccioRobot.powerOn();
+    robotStatus.reset();
 }
 
 void _BraccioI2C::pauseOff()
 {
     isPause = false;
     BraccioRobot.pauseOff();
+    robotStatus.isPaused = false;
 }
 
 void _BraccioI2C::pauseOn()
 {
     isPause = true;
     BraccioRobot.pauseOn();
+    robotStatus.isPaused = true;
 }
 
 bool _BraccioI2C::IsProcessing()
@@ -105,6 +113,7 @@ void _BraccioI2C::loopI2C()
 
     // put your main code here, to run repeatedly:
 
+
     BraccioRobot.loopBraccioRobot();
 
     if (BraccioRobot.IsProcessing() || CircularBuffer.IsEmpty())
@@ -112,7 +121,7 @@ void _BraccioI2C::loopI2C()
 
     robotArmCmd *r = CircularBuffer.readCircBuff();
 
-    Serial.print("Robot Status: ");
+    Serial.print("Robot Status: "); // debug
     Serial.println(r->cmd);
 
     Serial.println(r->delay);
@@ -123,25 +132,55 @@ void _BraccioI2C::loopI2C()
     Serial.println(r->wrist_ver);
     Serial.println(r->gripper);
 
-    if (r->cmd == 0x4D) // New cmd.. M
+    if (r->cmd == 0x4D) // New cmd.. M - move
     {
         robotStatus = *r;
-        robotStatus.isNewCmd = true;
-
         BraccioRobot.ServoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
-
         robotStatus.isNewCmd = false;
     }
-    else if (r->cmd == 0x42 && !isArmInit) // New cmd.. B
+    else if (r->cmd == 0x42 && !isArmInit) // New cmd.. B - begin
     {
         robotStatus = *r;
         robotStatus.soft_start_level = r->getSoft_Start_Level();
 
         BraccioRobot.begin(robotStatus.soft_start_level);
-        Serial.println(robotStatus.soft_start_level);
+        Serial.println(robotStatus.soft_start_level); // debug
 
         robotStatus.isinit = true;
         robotStatus.isNewCmd = false;
         isArmInit = true;
+    }
+    else if (r->cmd == 0x50) // New cmd P - pause  on/off
+    {
+        Serial.println("Pause on/off: "); // debug
+
+        if (r->delay > 0) // P: True - pause On command
+        {
+            pauseOn();
+        }
+        else // P: False - pause Off command
+        {
+            pauseOff();
+        }
+        robotStatus.isNewCmd = false;
+    }
+    else if (r->cmd == 0x53) // S: - stop command
+    { 
+        Serial.println("Stop: "); // debug
+        Stop();
+        robotStatus.isNewCmd = false;
+    }
+    else if (r->cmd == 0x4F) // New cmd O - turn on/off command
+    {
+        Serial.println("Turn on/off: ");
+        if (r->delay > 0) // O: True - turn On command
+        {
+            powerOn();
+        }
+        else // O: False - turn Off command
+        {
+            powerOff();
+        }
+        robotStatus.isNewCmd = false;
     }
 }

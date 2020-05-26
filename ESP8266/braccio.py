@@ -21,7 +21,11 @@ class BraccioArm:
     # The default value for the soft start
     SOFT_START_DEFAULT = const(0)
     robotSoftStartLevel = int(SOFT_START_DEFAULT)
+
     robotArmInit = False
+    isTurnedOn = False
+    isPaused = False
+    isStop = False
 
     # robot arm starting position
     robotArmPosition = {
@@ -114,9 +118,10 @@ class BraccioArm:
             str(self.wrist_ver) + ',' + str(self.gripper)
         return txt
 
-    def toBytes(self, cmd_prefix=0):
+    def toBytes(self, cmd_prefix=0x00):
 
-        cmd = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        cmd = [cmd_prefix & 0xFF, 0x00, 0x00, 0x00,
+               0x00, 0x00, 0x00, 0x00]  # 8 bytes
         cmd[1] = self.delay & 0xFF
         cmd[2] = self.base & 0xFF
         cmd[3] = self.shoulder & 0xFF
@@ -127,8 +132,6 @@ class BraccioArm:
 
         if (cmd_prefix == 0x00):
             cmd.pop(0)
-        else:
-            cmd[0] = cmd_prefix & 0xFF
 
         return cmd
 
@@ -146,6 +149,7 @@ class BraccioArm:
         #  Calling Braccio.begin(SOFT_START_DISABLED) the Softstart is disabled and you can use the pin 12
         self.robotSoftStartLevel = soft_start_level
         self.robotArmInit = True
+        self.isStop = False
 
     """
      Braccio turns bag to start position
@@ -162,7 +166,7 @@ class BraccioArm:
         self.movement(20, 90, 45, 180, 180, 90, 10)
 
     """
-     Braccio turns bag to position
+     Braccio turns back to default position
      ready to turn off
  """
 
@@ -170,6 +174,27 @@ class BraccioArm:
         #  Calling Braccio.begin(SOFT_START_DISABLED) the Softstart is disabled and you can use the pin 12
         self.defaultpos()
         self.robotArmInit = False
+        self.isTurnedOn = False
+
+    """
+     Braccio turns on and reset to default position
+     ready to begin
+ """
+
+    def turnon(self):
+        self.defaultpos()
+        self.robotArmInit = False
+        self.isTurnedOn = True
+
+    def stop(self):
+        self.isPaused = False
+        self.isStop = True
+
+    def pauseoff(self):
+        isPaused = False
+
+    def pauseon(self):
+        isPaused = False
 
     """
      This functions allow you to control all the servo motors
@@ -195,6 +220,7 @@ class BraccioArm:
         self.wrist_rot = vWrist_rot
         self.wrist_ver = vWrist_ver
         self.gripper = vgripper
+        self.isStop = False
 
     # Initialize Test :
 
@@ -215,8 +241,12 @@ def main():
     print("JSON: ", arm.toJSON())
     print("bytes: ", arm.toBytes(0x4D))
 
+    arm.pauseon()
+    arm.pauseoff()
+    arm.stop()
     arm.defaultpos()
     arm.turnoff()
+    arm.turnon()
 
 
 if __name__ == '__main__':
