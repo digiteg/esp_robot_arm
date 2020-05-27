@@ -142,6 +142,4 @@ private:
     void softwarePWM(int high_time, int low_time);
 };
 
-
-
 #endif // BRACCIO_ROBOT_H_

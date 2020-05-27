@@ -11,9 +11,8 @@
 #include "BraccioI2C.h"
 #include "CircularBuffer.h"
 
-volatile int callCounter = 0; // holding count of executed I2C calls
 
-_CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
+ _CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
 
 //----------------------------------------
 
@@ -41,8 +40,6 @@ void _BraccioI2C::receiveCommand(int count)
         if (ReadBuff[0] == 0x4D || ReadBuff[0] == 0x42)
             CircularBuffer.writeCircBuff(ReadBuff); // Move cmd & Begin cmd
     }
-
-    callCounter++;
 }
 
 // Setup of I2C
@@ -52,7 +49,6 @@ void _BraccioI2C::setup(int devicenum)
     Wire.begin(devicenum);                            // join i2c bus (devicenum ID for master)
     Wire.onReceive((void (*)(int)) & receiveCommand); // Magic added here = register event
 
-    
     _BraccioRobot::setup();
 }
 
@@ -99,7 +95,7 @@ void _BraccioI2C::pauseOn()
     robotStatus.isPaused = true;
 }
 
-bool _BraccioI2C::IsProcessing()
+bool _BraccioI2C::isProcessing()
 {
     return _BraccioRobot::isProcessing();
 }

@@ -11,6 +11,7 @@
 #include "RobotArmCmd.h"
 #include "Braccio.h"
 
+
 /*
     Structure to keep robot arm status 
     @soft_start_level - used for inition, 0 value represents disabled arem soft start
@@ -89,7 +90,7 @@ public:
     /*
     Return ifo if command is still in process
 */
-    bool IsProcessing();
+    bool isProcessing();
 
 protected:
     bool isArmInit = false; // internal - true after intition
