@@ -8,10 +8,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "Braccio.h"
-
 #include "BraccioI2C.h"
-#include "RobotArmCmd.h"
 #include "CircularBuffer.h"
 
 volatile int callCounter = 0; // holding count of executed I2C calls
@@ -49,13 +46,14 @@ void _BraccioI2C::receiveCommand(int count)
 }
 
 // Setup of I2C
-void _BraccioI2C::setupI2C(int devicenum)
+void _BraccioI2C::setup(int devicenum)
 {
 
     Wire.begin(devicenum);                            // join i2c bus (devicenum ID for master)
     Wire.onReceive((void (*)(int)) & receiveCommand); // Magic added here = register event
 
-    BraccioRobot.setupBraccioRobot();
+    
+    _BraccioRobot::setup();
 }
 
 RobotArmStatus _BraccioI2C::getRobotArmStatus()
@@ -63,60 +61,57 @@ RobotArmStatus _BraccioI2C::getRobotArmStatus()
     return robotStatus; // return current robot status
 }
 
-void _BraccioI2C::Stop()
+void _BraccioI2C::stop()
 {
     isPause = false;
     robotStatus.reset(true);
     robotStatus.isStopped = true;
 
-    BraccioRobot.Stop();
-
-   
+    _BraccioRobot::stop();
 }
 
 void _BraccioI2C::powerOff()
 {
-    Stop();
-    BraccioRobot.powerOff();
-    robotStatus.isinit =false;
+    stop();
+    _BraccioRobot::powerOff();
+    robotStatus.isinit = false;
     robotStatus.isPowerOn = false;
 }
 
 void _BraccioI2C::powerOn()
 {
-    Stop();
-    BraccioRobot.powerOn();
+    stop();
+    _BraccioRobot::powerOn();
     robotStatus.reset();
 }
 
 void _BraccioI2C::pauseOff()
 {
     isPause = false;
-    BraccioRobot.pauseOff();
+    _BraccioRobot::pauseOff();
     robotStatus.isPaused = false;
 }
 
 void _BraccioI2C::pauseOn()
 {
     isPause = true;
-    BraccioRobot.pauseOn();
+    _BraccioRobot::pauseOn();
     robotStatus.isPaused = true;
 }
 
 bool _BraccioI2C::IsProcessing()
 {
-    return BraccioRobot.IsProcessing();
+    return _BraccioRobot::isProcessing();
 }
 
-void _BraccioI2C::loopI2C()
+void _BraccioI2C::loop()
 {
 
     // put your main code here, to run repeatedly:
 
+    _BraccioRobot::loop();
 
-    BraccioRobot.loopBraccioRobot();
-
-    if (BraccioRobot.IsProcessing() || CircularBuffer.IsEmpty())
+    if (_BraccioRobot::isProcessing() || CircularBuffer.IsEmpty())
         return;
 
     robotArmCmd *r = CircularBuffer.readCircBuff();
@@ -135,7 +130,7 @@ void _BraccioI2C::loopI2C()
     if (r->cmd == 0x4D) // New cmd.. M - move
     {
         robotStatus = *r;
-        BraccioRobot.ServoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
+        _BraccioRobot::servoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
         robotStatus.isNewCmd = false;
     }
     else if (r->cmd == 0x42 && !isArmInit) // New cmd.. B - begin
@@ -143,7 +138,7 @@ void _BraccioI2C::loopI2C()
         robotStatus = *r;
         robotStatus.soft_start_level = r->getSoft_Start_Level();
 
-        BraccioRobot.begin(robotStatus.soft_start_level);
+        _BraccioRobot::begin(robotStatus.soft_start_level);
         Serial.println(robotStatus.soft_start_level); // debug
 
         robotStatus.isinit = true;
@@ -165,9 +160,9 @@ void _BraccioI2C::loopI2C()
         robotStatus.isNewCmd = false;
     }
     else if (r->cmd == 0x53) // S: - stop command
-    { 
+    {
         Serial.println("Stop: "); // debug
-        Stop();
+        stop();
         robotStatus.isNewCmd = false;
     }
     else if (r->cmd == 0x4F) // New cmd O - turn on/off command

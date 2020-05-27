@@ -10,8 +10,6 @@
 
 #include "Braccio.h"
 
-_BraccioRobot BraccioRobot;
-
 //----------------------------------------
 
 //Initialize Braccio object
@@ -20,7 +18,7 @@ _BraccioRobot::_BraccioRobot()
 	previousTimeServoMove = millis(); // init internal Timer
 }
 
-void _BraccioRobot::setupBraccioRobot()
+void _BraccioRobot::setup()
 {
 	// initialization pin Servo motors
 	base.attach(11);
@@ -67,56 +65,56 @@ void _BraccioRobot::begin(int soft_start_level)
 	wrist_ver.write(170);
 	gripper.write(73);
 
-	Stop(); // reset all
+	stop(); // reset all
 
 	if (soft_start_level != SOFT_START_DISABLED)
 		softStart(soft_start_level);
 }
 
 // Stop all commands execution
-void _BraccioRobot::Stop()
+void _BraccioRobot::stop()
 {
 
 	// clear all positions
-	step_base = new_step_base; 
+	step_base = new_step_base;
 	step_shoulder = new_step_shoulder;
 	step_elbow = new_step_elbow;
 	step_wrist_rot = new_step_wrist_rot;
 	step_wrist_ver = new_step_wrist_ver;
 	step_gripper = new_step_gripper;
 
-	isExit = true;		// stop execution
-	isPause = false; 	// reset pause
+	isExit = true;	 // stop execution
+	isPause = false; // reset pause
 }
 
 // Turm power off if you are using the Arm Robot shield V1.6
 void _BraccioRobot::powerOff()
 {
-	Stop();
+	stop();
 	digitalWrite(SOFT_START_CONTROL_PIN, LOW);
 }
 
 // Turm power on if you are using the Arm Robot shield V1.6
 void _BraccioRobot::powerOn()
 {
-	Stop();
+	stop();
 	digitalWrite(SOFT_START_CONTROL_PIN, HIGH);
 }
 
 //  Release pause and continue robot arm movement shield V1.6
-void _BraccioRobot::pauseOff() 
+void _BraccioRobot::pauseOff()
 {
 	isPause = false;
 }
 
-// Pause robot arm movement 
+// Pause robot arm movement
 void _BraccioRobot::pauseOn()
 {
 	isPause = true;
 }
 
-// Retrn info if there is movement of robot arm in progress 
-bool _BraccioRobot::IsProcessing()
+// Retrn info if there is movement of robot arm in progress
+bool _BraccioRobot::isProcessing()
 {
 	return !isExit;
 }
@@ -164,7 +162,7 @@ int _BraccioRobot::getlimit(int value, int minv, int maxv)
 	return value;
 }
 
-// Move servo by 1 degree in time 
+// Move servo by 1 degree in time
 int _BraccioRobot::moveServo(Servo *s, int target, int step)
 {
 	//For each servo motor if next degree is not the same of the previuos than do the movement
@@ -196,7 +194,7 @@ int _BraccioRobot::moveServo(Servo *s, int target, int step)
  	@param vWrist_rot next wrist vertical servo motor degree
  	@param vgripper next gripper servo motor degree
  */
-int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
+int _BraccioRobot::servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
 {
 
 	// Check values, to avoid dangerous positions for the Braccio
@@ -216,7 +214,7 @@ int _BraccioRobot::ServoMovement(int stepDelay, int vBase, int vShoulder, int vE
 	isExit = false; // enable loop
 }
 
-void _BraccioRobot::loopBraccioRobot()
+void _BraccioRobot::loop()
 {
 	if (isExit || isPause)
 		return;
@@ -241,6 +239,6 @@ void _BraccioRobot::loopBraccioRobot()
 	//It checks if all the servo motors are in the desired position
 	if ((new_step_base == step_base) && (new_step_shoulder == step_shoulder) && (new_step_elbow == step_elbow) && (new_step_wrist_rot == step_wrist_rot) && (new_step_wrist_ver == step_wrist_ver) && (new_step_gripper == step_gripper))
 	{
-		Stop(); // stop all 
+		stop(); // stop all
 	}
 }

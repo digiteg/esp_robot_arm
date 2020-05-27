@@ -9,6 +9,7 @@
 #define BRACCIO_I2C_H_
 
 #include "RobotArmCmd.h"
+#include "Braccio.h"
 
 /*
     Structure to keep robot arm status 
@@ -41,11 +42,11 @@ typedef struct RobotArmStatus : robotArmCmd
         return *this;
     }
 
-    void reset(bool init =false, bool newcmd = false)
+    void reset(bool init = false, bool newcmd = false)
     {
         isinit = init;
         isNewCmd = newcmd;
-     
+
         isPaused = false;
         isPowerOn = true;
         isStopped = false;
@@ -57,24 +58,14 @@ typedef struct RobotArmStatus : robotArmCmd
     _BraccioI2C class provides interface for communication over I2C with Braccio robot arm 
 
 */
-class _BraccioI2C
+class _BraccioI2C : private _BraccioRobot
 {
-private:
-    // multithread ...
-    bool isPause = false;
-    unsigned long previousTime;
-    long timeInterval = 1000;
-
-    RobotArmStatus robotStatus; // to keep actual robot status
-    void receiveCommand(int count);
-
-protected:
-    bool isArmInit = false; // internal - true after intition
 
 public:
-    _BraccioI2C();                      // constructor
-    void setupI2C(int devicenum);       // inition of I2C communication
-    void loopI2C();                     // update status
+    _BraccioI2C(); // constructor
+
+    void setup(int devicenum);          // inition of I2C communication
+    void loop();                        // update status
     RobotArmStatus getRobotArmStatus(); // return actual arm status
 
     /* 
@@ -93,12 +84,24 @@ public:
     /* 
     Stop exec of command and all servo motors. 
 */
-    void Stop();
+    void stop();
 
     /*
     Return ifo if command is still in process
 */
     bool IsProcessing();
+
+protected:
+    bool isArmInit = false; // internal - true after intition
+
+private:
+    // multithread ...
+    bool isPause = false;
+    unsigned long previousTime;
+    long timeInterval = 1000;
+
+    RobotArmStatus robotStatus; // to keep actual robot status
+    void receiveCommand(int count);
 };
 
 #endif // BRACCIO_I2C_H_

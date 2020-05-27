@@ -12,7 +12,7 @@ void setup()
 {
     // put your setup code here, to run once:
 
-    BraccioI2C.setupI2C(100);
+    BraccioI2C.setup(100);
     delay(100); // sleep for while
 
 #ifdef DEBUG
@@ -25,6 +25,6 @@ void setup()
 void loop()
 {
     // put your main code here, to run repeatedly:
-    BraccioI2C.loopI2C();
+    BraccioI2C.loop();
     
 }

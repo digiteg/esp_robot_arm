@@ -8,7 +8,7 @@
 
 */
 
-#ifndef BRACCIO_ ROBOT_H_
+#ifndef BRACCIO_ROBOT_H_
 #define BRACCIO_ROBOT_H_
 
 #include <Arduino.h>
@@ -37,7 +37,7 @@ public:
     /* 
   Braccio setup
  */
-    void setupBraccioRobot();
+    void setup();
 
     /*
      Braccio initializations and set intial position
@@ -51,7 +51,7 @@ public:
     /*
      This function allow the user to control all the servo motors in the Braccio
  */
-    int ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
+    int servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
 
     /* 
     Turns off / On power to the servo motors. This only work if you are using a robot shield later than V1.6.
@@ -69,17 +69,17 @@ public:
     /* 
     Stop exec of command and all servo motors. 
 */
-    void Stop();
+    void stop();
 
     /*
     Return ifo if command is still in process
 */
-    bool IsProcessing();
+    bool isProcessing();
 
     /*
     Exec commands and allow multitasking
 */
-    void loopBraccioRobot();
+    void loop();
 
 private:
     Servo base;
@@ -142,6 +142,6 @@ private:
     void softwarePWM(int high_time, int low_time);
 };
 
-extern _BraccioRobot BraccioRobot;
+
 
 #endif // BRACCIO_ROBOT_H_
