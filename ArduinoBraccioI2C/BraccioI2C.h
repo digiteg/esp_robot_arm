@@ -98,8 +98,7 @@ protected:
 private:
     // multithread ...
     bool isPause = false;
-    unsigned long previousTime;
-    long timeInterval = 1000;
+
 
     RobotArmStatus robotStatus; // to keep actual robot status
     void receiveCommand(int count);

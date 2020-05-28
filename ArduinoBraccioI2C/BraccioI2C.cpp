@@ -12,7 +12,7 @@
 #include "CircularBuffer.h"
 
 
- _CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
+volatile _CircularBuffer<robotArmCmd> CircularBuffer; // ??? keep me out
 
 //----------------------------------------
 
@@ -24,8 +24,6 @@ _BraccioI2C::_BraccioI2C()
     robotStatus.soft_start_level = 0;
     robotStatus.isinit = false;
     robotStatus.isNewCmd = false;
-
-    previousTime = millis(); // init internal Timer
 }
 
 // Event handler - read from I2C
