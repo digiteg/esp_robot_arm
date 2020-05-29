@@ -11,7 +11,6 @@
 #include "RobotArmCmd.h"
 #include "Braccio.h"
 
-
 /*
     Structure to keep robot arm status 
     @soft_start_level - used for inition, 0 value represents disabled arem soft start
@@ -99,9 +98,10 @@ private:
     // multithread ...
     bool isPause = false;
 
-
     RobotArmStatus robotStatus; // to keep actual robot status
+
     void receiveCommand(int count);
+    void requestCommantStatus();
 };
 
 #endif // BRACCIO_I2C_H_

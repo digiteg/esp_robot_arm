@@ -53,12 +53,18 @@ class BraccioArmI2C(BraccioArm):
 
     def _sendI2Ccommand(self, buff):
         if(self.devicefound):
-            self.i2c.start()
             self.i2c.writeto(self.robot_address, bytearray(buff), False)
-            self.i2c.stop()
-            sleep_ms(100)
         else:
             print("Device not found")
+
+    def _readI2C(self):
+        data=None
+        if(self.devicefound):
+            data= self.i2c.readfrom(self.robot_address,6)
+        else:
+            print("Device not found")
+        return data
+
 
     def _getSimpleCmd(self, cmdid=0x00, param1=0x00, param2=0x00):
         cmd = [cmdid & 0xFF, param1 & 0xFF, param2 &
@@ -93,6 +99,10 @@ class BraccioArmI2C(BraccioArm):
                          vElbow, vWrist_rot, vWrist_ver, vgripper)
         self._sendMove()  # M: - movement command
 
+    def readACK(self):
+        buff= self._readI2C()
+        print(buff)
+    
     def defaultpos(self):
         super().defaultpos()  # go to default position
         self._sendMove()  # M: - movement command
@@ -154,6 +164,7 @@ print(arm.gripper)
 
 arm.begin()
 
+arm.readACK()
 
 #arm.movement(180, 180, 180, 180, 180, 180, 180)
 
@@ -163,9 +174,12 @@ for i in range(5):
     arm.movement(20, 175, 165, 0, 175, 0, 10)
     sleep_ms(10)
 
-arm.movement(20, 90,  0, 175,   0, 160,  15)
-arm.defaultpos()
 
+
+arm.movement(20, 90,  0, 175,   0, 160,  15)
+arm.readACK()
+arm.defaultpos()
+arm.readACK()
 # i2c.start()
 # i2c.writeto(robot_arm_address,arm.toBytes())
 # i2c.stop()
