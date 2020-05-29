@@ -14,7 +14,7 @@
 /*
     Structure to keep robot arm status 
     @soft_start_level - used for inition, 0 value represents disabled arem soft start
-    @isinit - true after intition
+    @isinit - true after initiation
     @isNewCmd - if values changed
 */
 

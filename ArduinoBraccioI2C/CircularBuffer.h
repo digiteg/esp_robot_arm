@@ -1,4 +1,3 @@
-
 /*
     
     CircularBuffer.h - Braccio arm I2C communication  library Version 1.0
@@ -52,7 +51,11 @@ public:
     {
         circBuffer[writeIndex]= item;       // store item into buffer
         writeIndex = (writeIndex+1) % MAX_CIRC_BUFF;  // calculate writing circular index 
-        circBufferCount++;
+        
+        if (circBufferCount<=0)
+            circBufferCount=1;
+        else
+            circBufferCount++;
     }
 
     void writeCircBuff(byte * item)   // 8 bytes buffer
