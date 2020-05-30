@@ -29,11 +29,7 @@ Short description... Micropython talks with Arduino Robot arm over I2C
 
 # Story
 
-# Schematics
 
-# Code
-
-# Credits
 
 #### Description
 
@@ -52,7 +48,7 @@ After assemblying the arm, to verify its working, just run the example program t
 -   Available is detailed  [user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf)
 -   Examples of use: object tracking using the webcam, rotation of the screen during a videoconference, tracking the sun with solar panel
 
-![Braccio robot arm](/images/robot1.jpg)
+![Braccio robot arm](/images/robot1.jpg =10x10)
 ![Braccio robot arm](/images/robot2.jpg)
 
 [Read the user manual!](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf)
@@ -133,3 +129,9 @@ The mounting of device can be found in  [the user guide](http://download.arduino
 -   1x screwdriver
 -   set of screws and nuts
 -   1x package
+
+# Schematics
+
+# Code
+
+# Credits
