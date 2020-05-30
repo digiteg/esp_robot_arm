@@ -75,7 +75,7 @@ void _BraccioI2C::receiveCommand(int count)
 
 void _BraccioI2C::requestCommantStatus()
 {
-    Wire.write(robotmsgtext[robotmsgindex], 6);  // send msg to Master over I2C
+    Wire.write(robotmsgtext[robotmsgindex], 6); // send msg to Master over I2C
 }
 
 // Setup of I2C
@@ -103,7 +103,7 @@ void _BraccioI2C::stop()
     robotStatus.isStopped = true;
     _BraccioRobot::stop();
 
-    robotmsgindex = RobotMsg::MStop; // stopped
+    robotmsgindex = MStop; // stopped
 }
 
 // Turn power off if you are using the Arm Robot shield V1.6
@@ -114,7 +114,7 @@ void _BraccioI2C::powerOff()
     robotStatus.isinit = false;
     robotStatus.isPowerOn = false;
 
-    robotmsgindex = RobotMsg::MPowerOff; // armoff
+    robotmsgindex = MPowerOff; // armoff
 }
 
 // Turn power on if you are using the Arm Robot shield V1.6
@@ -124,7 +124,7 @@ void _BraccioI2C::powerOn()
     _BraccioRobot::powerOn();
     robotStatus.reset();
 
-    robotmsgindex = RobotMsg::MPauseOn; // armonn
+    robotmsgindex = MPauseOn; // armonn
 }
 
 //  Release pause and continue robot arm movement shield V1.6
@@ -134,7 +134,7 @@ void _BraccioI2C::pauseOff()
     _BraccioRobot::pauseOff();
     robotStatus.isPaused = false;
 
-    robotmsgindex = RobotMsg::MPowerOff; // npause
+    robotmsgindex = MPowerOff; // npause
 }
 
 // Pause robot arm movement
@@ -144,7 +144,7 @@ void _BraccioI2C::pauseOn()
     _BraccioRobot::pauseOn();
     robotStatus.isPaused = true;
 
-    robotmsgindex = RobotMsg::MPauseOn; // paused
+    robotmsgindex = MPauseOn; // paused
 }
 
 // Retrn info if there is movement of robot arm in progress
@@ -166,9 +166,9 @@ void _BraccioI2C::loop()
     if (inproc || CircularBuffer.isEmpty())
     {
         if (inproc)
-            robotmsgindex = RobotMsg::MInProgress; // inproc
+            robotmsgindex = MInProgress; // inproc
         else
-            robotmsgindex = RobotMsg::MWait; // inproc
+            robotmsgindex = MWait; // inproc
         return;
     }
 
@@ -189,8 +189,8 @@ void _BraccioI2C::loop()
     {
         robotStatus = *r;
         _BraccioRobot::servoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
-        robotStatus.isNewCmd = false;
-        robotmsgindex = RobotMsg::MMove; // moving";
+
+        robotmsgindex = MMove; // moving";
     }
     else if (r->cmd == CMD_BEGIN && !isArmInit) // New cmd.. B - begin
     {
@@ -201,35 +201,31 @@ void _BraccioI2C::loop()
         Serial.println(robotStatus.soft_start_level); // debug
 
         robotStatus.isinit = true;
-        robotStatus.isNewCmd = false;
         isArmInit = true;
-        robotmsgindex = RobotMsg::MBegin; // abegin
+        robotmsgindex = MBegin; // abegin
     }
     else if (r->cmd == CMD_PAUSE) // New cmd P - pause  on/off
     {
         Serial.println("Pause on/off: "); // debug
 
         if (r->delay > 0) // Bool parameter to keep pause On/Off
-            pauseOn(); // P: True - pause On command
+            pauseOn();    // P: True - pause On command
         else
             pauseOff(); // P: False - pause Off command
-        robotStatus.isNewCmd = false;
     }
     else if (r->cmd == CMD_STOP) // S: - stop command
     {
         Serial.println("Stop: "); // debug
-
         stop();
-        robotStatus.isNewCmd = false;
     }
     else if (r->cmd == CMD_POWER) // New cmd O - turn on/off command
     {
-        Serial.println("Turn on/off: ");
+        Serial.println("Turn on/off: "); // debug
 
         if (r->delay > 0) // Bool parameter o keep pause On/Off
-            powerOn(); // O: True - turn On command
+            powerOn();    // O: True - turn On command
         else
             powerOff(); // O: False - turn Off command
-        robotStatus.isNewCmd = false;
     }
+    robotStatus.isNewCmd = false;
 }
