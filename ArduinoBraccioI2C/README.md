@@ -88,7 +88,11 @@ _The driver of the arm, cap over Arduino - Braccio Shield._
 
 #### Installation of arm - video tutorial
 
+![test](https://www.youtube.com/watch?v=eKAhQHApFGQ&feature=emb_logo)
+
 The mounting of device can be found in  [the user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf) and video posted below.
+
+
 
 #### Specification
 
@@ -99,7 +103,7 @@ The mounting of device can be found in  [the user guide](http://download.arduino
 -   Maximum width: 520 mm
 -   Base width: 140 mm
 -   Weight after folding: 792 g
--   **4x [Servo](https://botland.com.pl/en/135-serwomechanizmy)  SR43:**
+-   **4x Servo SR43:**
     -   Control: PWM signal
     -   Torque: 12.2 kg for 4.8 volts, 14.5 kg for 6.0 V
     -   Speed: 0.2 s/60° for 4.8 V, 0,18 sec/60° for 6.0 V
