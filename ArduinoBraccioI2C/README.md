@@ -67,7 +67,8 @@ The kit includes a controller as cap for Arduino, so-called Braccio Arduino Shie
 -   [Arduino Tian](http://botland.com.pl/arduino-moduly-glowne/6294-arduino-tian-wifi-ethernet-bluetooth.html)
 
 
-[![Sterownik robota Arduino](http://botland.com.pl/img/art/inne/06362_11b.jpg "Arduino Shield Braccio")](http://botland.com.pl/img/art/inne/06362_11.jpg)
+![Braccio Shield](/images/shield2_b.jpg)
+![Braccio Shield](/images/shield1_b.jpg)
 
 _The driver of the arm, cap over Arduino - Braccio Shield._
 
