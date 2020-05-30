@@ -29,9 +29,12 @@ Short description... Micropython talks with Arduino Robot arm over I2C
 
 # Story
 
+Why Did We Build This?
+Idea 💡
+Hardware Build
 
 
-#### Description
+## **Step 1: Getting Started with Braccio robot arm**
 
 Arm of the robot for self-assembly, equipped with 6 servos. There is also a special controller Braccio in the form of cap over the  [Arduino](https://botland.com.pl/en/283-arduino-core-modules)  and the necessary mounting elements. The device is powered with 5 volts, consumes a maximum current of 5 A. (includes power supply).
 
@@ -46,7 +49,7 @@ After assemblying the arm, to verify its working, just run the example program t
 -   Included is power adapter 5 V / 5 VA
 -   Available are sample programs directly from  [the Arduino IDE environment](http://www.arduino.org/downloads)
 -   Available is detailed  [user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf)
--   Examples of use: object tracking using the webcam, rotation of the screen during a videoconference, tracking the sun with solar panel
+-   Examples of use: object tracking using the webcam, rotation of the screen during a video conference, tracking the sun with solar panel
 
 ![Braccio robot arm](/images/robot1_b.jpg)
 ![Braccio robot arm](/images/robot2_b.jpg)
@@ -88,10 +91,9 @@ _The driver of the arm, cap over Arduino - Braccio Shield._
 
 #### Installation of arm - video tutorial
 
-[![test](/images/video1_b.png)](https://www.youtube.com/watch?v=eKAhQHApFGQ&feature=emb_logo)
-
 The mounting of device can be found in  [the user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf) and video posted below.
 
+[![test](/images/video1_b.png)](https://www.youtube.com/watch?v=eKAhQHApFGQ&feature=emb_logo)
 
 
 #### Specification
@@ -123,7 +125,7 @@ The mounting of device can be found in  [the user guide](http://download.arduino
     -   Weight: 27 g
 -   Power supply: 5 V / 5 A (included)
 
-#### Includes:
+#### Arm package includes:
 
 -   1x cap over Arduino Braccio Shield (Arduino main module must be purchased separately)
 -   1x power adapter 5 V / 5 A
@@ -135,8 +137,14 @@ The mounting of device can be found in  [the user guide](http://download.arduino
 -   set of screws and nuts
 -   1x package
 
+## **Step 2: ..**
+## **Step 3: ..**
+## **Step 4: Testing the Model**
+
 # Schematics
 
 # Code
+
+# Next steps
 
 # Credits
