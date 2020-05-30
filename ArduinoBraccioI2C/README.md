@@ -1,4 +1,4 @@
-# Name - ESP8266 talk with robot ARM over I2C
+# **Name - ESP8266 talk with robot ARM over I2C**
 
 Short description... Micropython talks with Arduino Robot arm over I2C
 
