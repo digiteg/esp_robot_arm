@@ -48,8 +48,8 @@ After assemblying the arm, to verify its working, just run the example program t
 -   Available is detailed  [user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf)
 -   Examples of use: object tracking using the webcam, rotation of the screen during a videoconference, tracking the sun with solar panel
 
-![Braccio robot arm](/images/robot1.jpg =100x100)
-![Braccio robot arm](/images/robot2.jpg)
+![Braccio robot arm](/images/robot1_b.jpg)
+![Braccio robot arm](/images/robot2_b.jpg)
 
 [Read the user manual!](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf)
 
