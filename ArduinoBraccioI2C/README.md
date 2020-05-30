@@ -7,7 +7,7 @@ Short description... Micropython talks with Arduino Robot arm over I2C
 
 ### **Hardware components**
 
-|||||
+||Name|Qt||
 | :---|:------------------------:|:---| ----:|
 | Img | Raspberry Pi 3 Model B	 | ×1 | link |
 | Img | Raspberry Pi 3 Model B	 | ×1 | link |
@@ -16,12 +16,12 @@ Short description... Micropython talks with Arduino Robot arm over I2C
 | Img | Raspberry Pi 3 Model B	 | ×1 | link |
 
 ### **Software apps and online services**
-|||||
+||Name|Qt||
 | :---|:------------------------:|:---| ----:|
 | Img | Raspberry Pi 3 Model B	 | ×1 | link |
 
 ### **Hand tools and fabrication machines**
-|||||
+||Name|Qt||
 | :---|:------------------------:|:---| ----:|
 | Img | Raspberry Pi 3 Model B	 | ×1 | link |
 
