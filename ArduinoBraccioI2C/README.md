@@ -88,7 +88,7 @@ _The driver of the arm, cap over Arduino - Braccio Shield._
 
 #### Installation of arm - video tutorial
 
-![test](https://www.youtube.com/watch?v=eKAhQHApFGQ&feature=emb_logo)
+[![test](/images/video1_b.png)](https://www.youtube.com/watch?v=eKAhQHApFGQ&feature=emb_logo)
 
 The mounting of device can be found in  [the user guide](http://download.arduino.org/products/braccio/Braccio_Quick_Start_Guide.pdf) and video posted below.
 
