@@ -65,7 +65,7 @@ void _BraccioI2C::receiveCommand(int count)
     case CMD_PAUSE:
     case CMD_BEGIN:
     case CMD_MOVE:
-        CircularBuffer.writeCircBuff(ReadBuff); // Move cmd & Begin cmd
+        CircularBuffer.push(ReadBuff); // Move cmd & Begin cmd
     default:
         return;
     }
@@ -163,7 +163,7 @@ void _BraccioI2C::loop()
 
     bool inproc = isProcessing();
 
-    if (inproc || CircularBuffer.IsEmpty())
+    if (inproc || CircularBuffer.isEmpty())
     {
         if (inproc)
             robotmsgindex = RobotMsg::MInProgress; // inproc
@@ -172,7 +172,7 @@ void _BraccioI2C::loop()
         return;
     }
 
-    robotArmCmd *r = CircularBuffer.readCircBuff();
+    robotArmCmd *r = CircularBuffer.pop();
 
     Serial.print("Robot Status: "); // debug
     Serial.println(r->cmd);

@@ -1,5 +1,40 @@
-# Micropython code for ESP8266 to talk with robot ARM over I2C
-Micropython talks with Arduino Robot arm over I2C
+# Name - ESP8266 talk with robot ARM over I2C
+
+Short description... Micropython talks with Arduino Robot arm over I2C
+
+
+# Things used in this project
+
+### **Hardware components**
+
+|||||
+| :---|:------------------------:|:---| ----:|
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+
+### **Software apps and online services**
+|||||
+| :---|:------------------------:|:---| ----:|
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+
+### **Hand tools and fabrication machines**
+|||||
+| :---|:------------------------:|:---| ----:|
+| Img | Raspberry Pi 3 Model B	 | ×1 | link |
+
+
+
+# Story
+
+# Schematics
+
+# Code
+
+# Credits
+
 #### Description
 
 Arm of the robot for self-assembly, equipped with 6 servos. There is also a special controller Braccio in the form of cap over the  [Arduino](https://botland.com.pl/en/283-arduino-core-modules)  and the necessary mounting elements. The device is powered with 5 volts, consumes a maximum current of 5 A. (includes power supply).

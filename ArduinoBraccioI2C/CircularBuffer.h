@@ -23,23 +23,26 @@ private:
 
 public:
 
-    bool IsNotEmpty()   
+    // Returns false if buffer is empty
+    bool isNotEmpty()   
     {
         return (circBufferCount > 0);       // true if buffer is not empty
     }
 
-    bool IsEmpty()   
+    // Returns true if buffer is empty
+    bool isEmpty()   
     {
         return (circBufferCount <= 0);       // true if buffer is not empty
     }
 
-
-    bool IsFull()
+    // Returns true in case of buffer overflow 
+    bool isFull()
     {
         return (circBufferCount >= MAX_CIRC_BUFF); // did we reach buffer max
     }
 
-    T*  readCircBuff() 
+    // Remove top element
+    T*  pop() 
     {
         int r =readIndex;                   // keep old index value
         readIndex = (readIndex+1) % MAX_CIRC_BUFF;  // calculate reading circular index 
@@ -47,7 +50,8 @@ public:
         return &circBuffer[r];
     }
 
-    void write(T item)
+    // Insert element
+    void push(T item)
     {
         circBuffer[writeIndex]= item;       // store item into buffer
         writeIndex = (writeIndex+1) % MAX_CIRC_BUFF;  // calculate writing circular index 
@@ -58,12 +62,15 @@ public:
             circBufferCount++;
     }
 
-    void writeCircBuff(byte * item)   // 8 bytes buffer
+    // Insert element from byte array
+    void push(byte * item)   // 8 bytes buffer
     {
         circBuffer[writeIndex]=item;  // read from buffer
         writeIndex = (writeIndex+1) % MAX_CIRC_BUFF;
         circBufferCount++;          // internal usage counter
     }
+
+    // Reset counters back to initial state
     void reset()
     {
         readIndex=0;
