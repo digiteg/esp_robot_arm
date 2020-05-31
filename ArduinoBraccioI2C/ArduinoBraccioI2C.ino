@@ -8,7 +8,7 @@
 #endif
 
 #ifndef BRACCIO_DEMO
-//#define  BRACCIO_DEMO 1
+#define BRACCIO_DEMO 1
 #endif
 
 //#include "OOP.h"
@@ -36,11 +36,11 @@ test(addnum) { assertEqual(addnum(10, 10), 20); }
 
 // Ciao Multistask ..
 unsigned long previousTime = 0;
-long timeInterval = 500;
+long timeInterval = 1000;
 
 int ciao_counter = 0;
 
-int demo_step = -1;
+int demo_step = 0;
 int demo_counter = 0;
 
 /*
@@ -52,56 +52,75 @@ int demo_counter = 0;
 */
 
 // The braccio Say 'Ciao' with the Tongue
-bool sayCiao()
+
+void resetTimer()
+{
+    previousTime= millis();
+}
+
+bool delayLoop()
 {
 
   unsigned long currentTime = millis();
 
-  if (ciao_counter == 0)
-  {
-    BraccioI2C.servoMovement(20, 90, 0, 180, 160, 0, 15);
-    ciao_counter++;
-    previousTime = currentTime;
-    return false;
-  }
-
-  // scheduled task executed afther wait interval timeIntervalServoMove
-  if (currentTime - previousTime > timeInterval)
-  {
-
-    previousTime = currentTime; // restart time counter
-    if (ciao_counter == 1)
-      BraccioI2C.servoMovement(10, 90, 0, 180, 160, 0, 15);
-    else if (ciao_counter == 2)
-      BraccioI2C.servoMovement(10, 90, 0, 180, 160, 0, 73);
-
-    ciao_counter++;
-
-    if (ciao_counter >= 3)
-    {
-      ciao_counter = 1;
+	// scheduled task executed afther wait interval timeIntervalServoMove
+	if (currentTime - previousTime > timeInterval)
+	{
+      previousTime = currentTime;
       return true;
-    }
   }
-
   return false;
+}
+
+
+void sayCiao()
+{
+
+    for (int i=0; i<3; i++)
+    {
+            BraccioI2C.servoMovement(20, 0, 15, 175, 0, 175, 68);
+            BraccioI2C.servoMovement(20, 175, 165, 0, 175, 0, 10);
+
+    }
 }
 
 // Braccio take the Sponge
 void takesponge()
 {
-  // starting position
+
+  Serial.println("-----------------------------------Take sponge------------------------------");
+
+  /*
+  Step Delay: a milliseconds delay between the movement of each servo.  Allowed values from 10 to 30 msec.
+  M1=base degrees. Allowed values from 0 to 180 degrees
+  M2=shoulder degrees. Allowed values from 15 to 165 degrees
+  M3=elbow degrees. Allowed values from 0 to 180 degrees
+  M4=wrist vertical degrees. Allowed values from 0 to 180 degrees
+  M5=wrist rotation degrees. Allowed values from 0 to 180 degrees
+  M6=gripper degrees. Allowed values from 10 to 73 degrees. 10: the toungue is open, 73: the gripper is closed.
+  */
+
+  //Starting position
   //(step delay  M1 , M2 , M3 , M4 , M5 , M6);
-  BraccioI2C.servoMovement(20, 0, 45, 180, 180, 90, 0);
+  BraccioI2C.servoMovement(20, 0, 45, 180, 180, 90, 10);
 
-  // I move arm towards the sponge
-  BraccioI2C.servoMovement(20, 0, 90, 180, 180, 90, 0);
+  //The braccio moves to the sponge. Only the M2 servo will moves
+  BraccioI2C.servoMovement(20, 0, 90, 180, 180, 90, 10);
 
-  // the gripper takes the sponge
+  //Close the gripper to take the sponge. Only the M6 servo will moves
+  BraccioI2C.servoMovement(10, 0, 90, 180, 180, 90, 60);
+
+  //Brings the sponge upwards.
+  BraccioI2C.servoMovement(20, 0, 45, 180, 45, 0, 60);
+
+  //Show the sponge. Only the M1 servo will moves
+  BraccioI2C.servoMovement(20, 180, 45, 180, 45, 0, 60);
+
+  //Return to the start position.
   BraccioI2C.servoMovement(20, 0, 90, 180, 180, 90, 60);
 
-  // up the sponge
-  BraccioI2C.servoMovement(20, 0, 45, 180, 45, 0, 60);
+  //Open the gripper
+  BraccioI2C.servoMovement(20, 0, 90, 180, 180, 90, 10);
 }
 
 // Braccio show the sponge to the user
@@ -133,25 +152,45 @@ void demo()
   switch (demo_step)
   {
   case 0:
-    if (demo_counter < 5)
-    {
-      if (sayCiao())
-        demo_counter++;
-    }
-    else
-      demo_step++;
+    Serial.println("-----------------------------------BEGIN------------------------------");
+    BraccioI2C.begin(SOFT_START_DEFAULT);
+    demo_step++;
     break;
 
   case 1:
+    
+    if (!BraccioI2C.isProcessing() && delayLoop())
+      demo_step++;
+    break;
+  case 2:
+    Serial.println("-----------------------------------CIAO------------------------------");
+    sayCiao();
+    demo_step++;
+    break;
+
+  case 3:
+    if (!BraccioI2C.isProcessing() && delayLoop())
+      demo_step++;
+    break;
+
+  case 4:
     takesponge();
     demo_step++;
     break;
-  case 2:
-    showsponge();
+
+  case 5:
+    if (!BraccioI2C.isProcessing() && delayLoop())
+      demo_step++;
+    break;
+
+  case 6:
+    // showsponge();
+ //   BraccioI2C.stop();
     demo_step++;
     break;
-  case 3:
-    throwsponge();
+  case 7:
+    //  throwsponge();
+ //   BraccioI2C.powerOff();
     demo_step++;
     break;
   }
@@ -184,26 +223,9 @@ void loop()
   // put your main code here, to run repeatedly:
   BraccioI2C.loop();
 
-#ifdef BRACCIO_DEMO
-
-  if (demo_step < 0)
-  {
-#ifdef DEBUG
-    Serial.println("Demo.. start");
-#endif
-    demo_step = 0;
-  }
   demo();
-  if (demo_step == 4)
-  {
-#ifdef DEBUG
-    Serial.println("Demo.. finished");
-#endif
-    demo_step++;
-  )
-#endif
 
-#ifdef BRACCIO_UNIT_TEST 
+#ifdef BRACCIO_UNIT_TEST
   TestRunner::run();
 #endif
-  }
+}

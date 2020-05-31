@@ -12,7 +12,7 @@
 /*
     I2C 8 bytes command structure
     @cmd - command type M - move, B - beggin
-    @delay - pause for millisconds
+    @delay - pause for milliseconds
     @base, shoulder, elbow, wrist_rot,wrist_ver, gripper - setting servo motors angle values  
 
 */
@@ -40,7 +40,7 @@ typedef struct robotArmCmd
         gripper = vgripper;
     }
 
-    void readbuff(byte *item) // read robotArmCmd from byte stream
+    void readbuff(const byte *item) // read robotArmCmd from byte stream
     {
 
         load(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]);
