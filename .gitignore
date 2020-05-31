@@ -1,6 +1,5 @@
 
 *.elf
 *.hex
+*.json
 .micropythonrc
-.json
-/.vscode/
