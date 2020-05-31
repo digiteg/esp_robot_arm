@@ -153,6 +153,63 @@ bool _BraccioI2C::isProcessing()
     return _BraccioRobot::isProcessing();
 }
 
+// Braccio initializations and set inital position
+void _BraccioI2C::begin(robotArmCmd *r)
+{
+    robotStatus = *r;
+    robotStatus.soft_start_level = r->getSoft_Start_Level();
+
+    _BraccioRobot::begin(robotStatus.soft_start_level);
+
+    robotStatus.isinit = true;
+    isArmInit = true;
+    robotmsgindex = MBegin; // abegin
+}
+
+/*
+     Braccio initializations and set inital position via creating Begin command
+  
+     Modifing this function you can set up the initial position of all the
+     servo motors of Braccio 
+     @param soft_start_level: the minimum value is -70, default value is 0 (SOFT_START_DEFAULT)
+     You should set begin(SOFT_START_DISABLED) if you are using the Arm Robot shield V1.6
+ */
+void _BraccioI2C::begin(int soft_start_level)
+{
+    robotArmCmd tmp;
+    tmp.cmd = CMD_BEGIN;
+    tmp.setSoft_Start_Level(soft_start_level);
+    CircularBuffer.push(tmp);
+}
+
+// 	This functions allows you to control all the servo motors
+
+void _BraccioI2C::servoMovement(robotArmCmd *r)
+{
+    robotStatus = *r;
+    _BraccioRobot::servoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
+    robotmsgindex = MMove; // moving";
+}
+
+/*
+ 	This functions allow you to control all the servo motors via creating Move command
+  
+ 	@param stepDelay The delay between each servo movement
+ 	@param vBase next base servo motor degree
+ 	@param vShoulder next shoulder servo motor degree
+ 	@param vElbow next elbow servo motor degree
+ 	@param vWrist_ver next wrist rotation servo motor degree
+ 	@param vWrist_rot next wrist vertical servo motor degree
+ 	@param vgripper next gripper servo motor degree
+ */
+
+void _BraccioI2C::servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
+{
+    robotArmCmd tmp;
+    tmp.load(CMD_MOVE, stepDelay, vBase, vShoulder, vElbow, vWrist_rot, vWrist_ver, vgripper);
+    CircularBuffer.push(tmp);
+}
+
 // running Braccio arm commands in time
 void _BraccioI2C::loop()
 {
@@ -187,22 +244,12 @@ void _BraccioI2C::loop()
 
     if (r->cmd == CMD_MOVE) // New cmd.. M - move
     {
-        robotStatus = *r;
-        _BraccioRobot::servoMovement(robotStatus.delay, robotStatus.base, robotStatus.shoulder, robotStatus.elbow, robotStatus.wrist_rot, robotStatus.wrist_ver, robotStatus.gripper);
-
-        robotmsgindex = MMove; // moving";
+        servoMovement(r);
     }
     else if (r->cmd == CMD_BEGIN && !isArmInit) // New cmd.. B - begin
     {
-        robotStatus = *r;
-        robotStatus.soft_start_level = r->getSoft_Start_Level();
-
-        _BraccioRobot::begin(robotStatus.soft_start_level);
+        begin(r);
         Serial.println(robotStatus.soft_start_level); // debug
-
-        robotStatus.isinit = true;
-        isArmInit = true;
-        robotmsgindex = MBegin; // abegin
     }
     else if (r->cmd == CMD_PAUSE) // New cmd P - pause  on/off
     {

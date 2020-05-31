@@ -51,7 +51,7 @@ public:
     /*
      This function allow the user to control all the servo motors in the Braccio
  */
-    int servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
+    void servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
 
     /* 
     Turns off / On power to the servo motors. This only work if you are using a robot shield later than V1.6.

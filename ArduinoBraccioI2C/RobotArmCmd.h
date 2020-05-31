@@ -19,7 +19,6 @@
 typedef struct robotArmCmd
 {
 
-
     byte cmd;
     byte delay;
     byte base;
@@ -29,30 +28,28 @@ typedef struct robotArmCmd
     byte wrist_rot;
     byte gripper;
 
+    void load(byte vcmd, byte vdelay, byte vbase, byte vshoulder, byte velbow, byte vwrist_ver, byte vwrist_rot, byte vgripper)
+    {
+        cmd = vcmd;
+        delay = vdelay;
+        base = vbase;
+        shoulder = vshoulder;
+        elbow = velbow;
+        wrist_ver = vwrist_ver;
+        wrist_rot = vwrist_rot;
+        gripper = vgripper;
+    }
+
     void readbuff(byte *item) // read robotArmCmd from byte stream
     {
-        cmd = item[0];
-        delay = item[1];
-        base = item[2];
-        shoulder = item[3];
-        elbow = item[4];
-        wrist_ver = item[5];
-        wrist_rot = item[6];
-        gripper = item[7];
+
+        load(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]);
     }
 
     robotArmCmd &operator=(const robotArmCmd &item) // operator (= robotArmCmd) overloading
     {
 
-        cmd = item.cmd;
-        delay = item.delay;
-        base = item.base;
-        shoulder = item.shoulder;
-        elbow = item.elbow;
-        wrist_ver = item.wrist_ver;
-        wrist_rot = item.wrist_rot;
-        gripper = item.gripper;
-
+        load(item.cmd, item.delay, item.base, item.shoulder, item.elbow, item.wrist_ver, item.wrist_rot, item.gripper);
         return *this;
     }
 
@@ -66,6 +63,12 @@ typedef struct robotArmCmd
     {
         short s = (short)(base << 8 | delay & 0xFF); // short(2bytes) = high + low byte
         return s;
+    }
+
+    void setSoft_Start_Level(int soft_start_level) // extract soft start level
+    {
+        base = (soft_start_level >> 8) & 0xFF;
+        delay = soft_start_level & 0xFF;
     }
 
 } robotArmCmd;

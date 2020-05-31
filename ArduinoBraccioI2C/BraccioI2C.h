@@ -64,9 +64,18 @@ class _BraccioI2C : private _BraccioRobot
 public:
     _BraccioI2C(); // constructor
 
-    void setup(int devicenum);          // inition of I2C communication
-    void loop();                        // update status
-    RobotArmStatus getRobotArmStatus(); // return actual arm status
+    /*
+     inition of I2C communication
+      @param devicenum: register with ID on I2C
+*/
+
+    void setup(int devicenum);
+
+    // update status
+    void loop();
+
+    // return actual arm status
+    RobotArmStatus getRobotArmStatus();
 
     /* 
     Turns off / On power to the servo motors. This only work if you are using a robot shield later than V1.6.
@@ -91,7 +100,24 @@ public:
 */
     bool isProcessing();
 
+    /*
+     Braccio initializations and set inital position
+     Modifing this function you can set up the initial position of all the
+     servo motors of Braccio 
+     @param soft_start_level: the minimum value is -70, default value is 0 (SOFT_START_DEFAULT)
+     You should set begin(SOFT_START_DISABLED) if you are using the Arm Robot shield V1.6
+ */
+    void begin(int soft_start_level = SOFT_START_DEFAULT);
+
+    /*
+     This function allow the user to control all the servo motors in the Braccio
+ */
+    void servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper);
+
 protected:
+    void begin(robotArmCmd *r);
+    void servoMovement(robotArmCmd *r);
+
     bool isArmInit = false; // internal - true after intition
 
 private:

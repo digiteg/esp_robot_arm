@@ -194,7 +194,7 @@ int _BraccioRobot::moveServo(Servo *s, int target, int step)
  	@param vWrist_rot next wrist vertical servo motor degree
  	@param vgripper next gripper servo motor degree
  */
-int _BraccioRobot::servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
+void _BraccioRobot::servoMovement(int stepDelay, int vBase, int vShoulder, int vElbow, int vWrist_rot, int vWrist_ver, int vgripper)
 {
 
 	// Check values, to avoid dangerous positions for the Braccio
