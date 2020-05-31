@@ -3,4 +3,4 @@
 *.hex
 .micropythonrc
 .json
-.vscode/
+/.vscode/
